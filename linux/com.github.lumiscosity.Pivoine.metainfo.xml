@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+        <name>Pivoine</name>
+        <summary>CU Record Player Generator</summary>
+        <id>com.github.lumiscosity.Pivoine</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>GPL-3.0-or-later</project_license>
+
+	<developer_name translatable="no">lumiscosity</developer_name>
+	<developer id="org.neocities.lumiscosity">
+		<name translatable="no">lumiscosity</name>
+	</developer>
+
+        <launchable type="desktop-id">com.github.lumiscosity.Pivoine.desktop</launchable>
+
+	<content_rating type="oars-1.1"/>
+
+	<supports>
+		<control>pointing</control>
+		<control>keyboard</control>
+	</supports>
+
+        <url type="homepage">https://github.com/lumiscosity/pivoine</url>
+        <url type="bugtracker">https://github.com/lumiscosity/pivoine/issues</url>
+        <url type="contribute">https://github.com/lumiscosity/pivoine</url>
+        <url type="vcs-browser">https://github.com/lumiscosity/pivoine</url>
+
+	<description>
+                <p>CU Record Player Generator</p>
+	</description>
+</component>

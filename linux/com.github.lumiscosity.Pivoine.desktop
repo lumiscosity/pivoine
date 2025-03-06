@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Pivoine
+GenericName=CU Record Player Generator
+Comment=CU Record Player Generator
+Exec=pivoine %U
+Icon=com.github.lumiscosity.Pivoine
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;Utility;
