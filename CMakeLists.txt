@@ -27,6 +27,7 @@ endif(USE_SYSTEM_LIBLCF)
 add_executable(pivoine
   main.cpp
   track.h
+  unlock_check.h
 )
 target_link_libraries(pivoine PRIVATE Qt6::Core)
 target_link_libraries(pivoine PRIVATE lcf)
