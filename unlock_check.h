@@ -9,13 +9,17 @@
 #include <qfile.h>
 
 void branchstart(int type, int id, std::vector<lcf::rpg::EventCommand> &v) {
+    // conditional branch header
     lcf::rpg::EventCommand c;
+    c.indent = 0;
     c.code = int(lcf::rpg::EventCommand::Code::ConditionalBranch);
     c.parameters = {
         5,
         type == 0 ? 2 : 3,
         4,
-        id
+        id,
+        0,
+        1
     };
     v.push_back(c);
 
@@ -28,6 +32,7 @@ void branchstart(int type, int id, std::vector<lcf::rpg::EventCommand> &v) {
     v.push_back(mul9);
 
     lcf::rpg::EventCommand branchelse;
+    branchelse.indent = 0;
     branchelse.code = int(lcf::rpg::EventCommand::Code::ElseBranch);
     v.push_back(branchelse);
 
@@ -40,6 +45,7 @@ void branchstart(int type, int id, std::vector<lcf::rpg::EventCommand> &v) {
     v.push_back(mul8);
 
     lcf::rpg::EventCommand branchend;
+    branchend.indent = 0;
     branchend.code = int(lcf::rpg::EventCommand::Code::EndBranch);
     v.push_back(branchend);
 }
