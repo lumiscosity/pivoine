@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    unlock_check(v);
+    record_player(v);
 
     return 0;
 }
