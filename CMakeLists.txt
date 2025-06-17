@@ -25,9 +25,10 @@ else(USE_SYSTEM_LIBLCF)
 endif(USE_SYSTEM_LIBLCF)
 
 add_executable(pivoine
+  dbstring.h
   main.cpp
   track.h
-  unlock_check.h
+  record_player.h
 )
 target_link_libraries(pivoine PRIVATE Qt6::Core)
 target_link_libraries(pivoine PRIVATE lcf)
