@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dbstring.h"
+#include "../third_party/dbstring.h"
 #include "lcf/lmu/reader.h"
 #include "track.h"
 
