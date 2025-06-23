@@ -359,6 +359,7 @@ int record_player(std::string project, QWidget *parent) {
         gen_play_footer(p_play.event_commands);
         play_event.pages.push_back(p_play);
     }
+    int track_count = counter;
 
     // replace events
     counter = 0;
@@ -366,6 +367,7 @@ int record_player(std::string project, QWidget *parent) {
     for (auto i : map->events) {
         if (i.ID == 6) {
             map->events[counter] = play_event;
+            break;
         }
         counter++;
     }
@@ -373,6 +375,23 @@ int record_player(std::string project, QWidget *parent) {
     for (auto i : map->events) {
         if (i.ID == 18) {
             map->events[counter] = unlock_check_event;
+            break;
+        }
+        counter++;
+    }
+
+    // bump max counts
+    counter = 0;
+    for (auto i : map->events) {
+        if (i.ID == 36) {
+            for (lcf::rpg::EventCommand &j : map->events[counter].pages[0].event_commands) {
+                if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
+                    && j.parameters[1] == 144) {
+                    j.parameters[5] = track_count - 1;
+                    break;
+                }
+            }
+            break;
         }
         counter++;
     }

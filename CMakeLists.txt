@@ -32,6 +32,8 @@ add_executable(pivoine
   src/projectwindow.ui
   src/track.h
   src/record_player.h
+  src/book.h
+  src/book_data.h
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)
