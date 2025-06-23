@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 option(USE_SYSTEM_LIBLCF "Use system install of liblcf" OFF)
 if(USE_SYSTEM_LIBLCF)
@@ -27,10 +27,13 @@ endif(USE_SYSTEM_LIBLCF)
 add_executable(pivoine
   third_party/dbstring.h
   src/main.cpp
+  src/projectwindow.cpp
+  src/projectwindow.h
+  src/projectwindow.ui
   src/track.h
   src/record_player.h
 )
-target_link_libraries(pivoine PRIVATE Qt6::Core)
+target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)
 
 include(GNUInstallDirs)
@@ -38,3 +41,5 @@ install(TARGETS pivoine
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+qt_finalize_executable(pivoine)

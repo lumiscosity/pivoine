@@ -7,6 +7,8 @@
 #include <lcf/rpg/event.h>
 #include <lcf/rpg/map.h>
 
+#include <QTextStream>
+#include <QFileDialog>
 #include <qfile.h>
 
 void gen_unlock_check_header(int type, int id, std::vector<lcf::rpg::EventCommand> &v) {
@@ -261,7 +263,31 @@ void gen_play_footer(std::vector<lcf::rpg::EventCommand> &v) {
     v.push_back(label2);
 }
 
-int record_player(QList<QList<track>>& track_list) {
+int record_player(std::string project, QWidget *parent) {
+    // load the record player data as a csv
+    QList<QList<track>> track_list;
+    QFile f(QFileDialog::getOpenFileName(parent, "Select the record player data", "", "Tab separated values (*.tsv)"));
+    if (f.open(QFile::ReadOnly | QFile::Text)){
+        QTextStream in(&f);
+        QString s;
+        while (in.readLineInto(&s)) {
+            QStringList split = s.split("\t");
+            if (split.size() >= 7) {
+                bool has_id = split[0].isEmpty();
+                if (has_id) {
+                    track_list.last().append(track(split[1].trimmed(), split[2], split[3].toInt(), split[4].toInt(), split[5], split[6].toInt(), split[7].toInt()));
+                } else {
+                    QList<track> temp;
+                    temp.append(track(split[1].trimmed(), split[2], split[3].toInt(), split[4].toInt(), split[5], split[6].toInt(), split[7].toInt()));
+                    track_list.append(temp);
+                }
+            }
+        }
+        track_list.pop_front();
+    } else {
+        return 1;
+    }
+
     // construct the holding events
     lcf::rpg::Event unlock_check_event;
     unlock_check_event.ID = 18;
@@ -336,7 +362,7 @@ int record_player(QList<QList<track>>& track_list) {
 
     // replace events
     counter = 0;
-    std::unique_ptr<lcf::rpg::Map> map = lcf::LMU_Reader::Load("Map0007.lmu", "UTF-8");
+    std::unique_ptr<lcf::rpg::Map> map = lcf::LMU_Reader::Load(project + "/Map0007.lmu", "UTF-8");
     for (auto i : map->events) {
         if (i.ID == 6) {
             map->events[counter] = play_event;

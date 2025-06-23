@@ -1,0 +1,42 @@
+#include "projectwindow.h"
+#include "record_player.h"
+#include "ui_projectwindow.h"
+
+#include <QFileDialog>
+#include <QMessageBox>
+
+ProjectWindow::ProjectWindow(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::ProjectWindow)
+{
+    ui->setupUi(this);
+}
+
+ProjectWindow::~ProjectWindow()
+{
+    delete ui;
+}
+
+void ProjectWindow::on_projectPushButton_clicked()
+{
+    this->project = QFileDialog::getExistingDirectory(this, "Select the project folder");
+    bool dirty = this->project.isEmpty();
+    if (!dirty && !QFile(this->project+"/RPG_RT.ldb").exists()) {
+        dirty = true;
+        QMessageBox::critical(this, "Error", "This folder isn't an RPG Maker 2003 project!");
+    }
+    if (dirty) {
+        ui->projectTextLabel->setText("...");
+    } else {
+        ui->projectTextLabel->setText(this->project);
+    }
+    ui->rpPushButton->setEnabled(!dirty);
+    ui->bookPushButton->setEnabled(!dirty);
+}
+
+
+void ProjectWindow::on_rpPushButton_clicked()
+{
+    record_player(this->project.toStdString(), this);
+}
+
