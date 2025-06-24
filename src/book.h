@@ -57,7 +57,7 @@ QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
     return c;
 }
 
-int book(std::string project, QWidget *parent) {
+int gen_cover(std::string project, QWidget *parent){
     // load the cover data as a csv
     QList<cover> cover_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the cover data", "", "Tab separated values (*.tsv)"));
@@ -98,6 +98,39 @@ int book(std::string project, QWidget *parent) {
     }
     int cover_count = counter;
 
+    // replace events
+    counter = 0;
+    std::unique_ptr<lcf::rpg::Map> map = lcf::LMU_Reader::Load(project + "/Map0009.lmu", "UTF-8");
+    for (auto i : map->events) {
+        if (i.ID == 22) {
+            map->events[counter] = cover_event;
+            break;
+        }
+        counter++;
+    }
+    // bump max counts
+    counter = 0;
+    for (auto i : map->events) {
+        if (i.ID == 36) {
+            for (lcf::rpg::EventCommand &j : map->events[counter].pages[0].event_commands) {
+                if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
+                    && j.parameters[1] == 111) {
+                    j.parameters[5] = cover_count;
+                    break;
+                }
+            }
+            break;
+        }
+        counter++;
+    }
+    lcf::LMU_Reader::Save("Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
+
+
+    return 0;
+}
+
+
+int gen_theme(std::string project, QWidget *parent) {
     // load the theme data as a csv
     QList<theme> theme_list;
     QFile theme_f(QFileDialog::getOpenFileName(parent, "Select the theme data", "", "Tab separated values (*.tsv)"));
@@ -114,13 +147,18 @@ int book(std::string project, QWidget *parent) {
         return 1;
     }
 
+    lcf::rpg::EventCommand switchoff;
+    switchoff.code = int(lcf::rpg::EventCommand::Code::ControlSwitches);
+    switchoff.indent = 0;
+    switchoff.parameters = { 0, 1, 1, 1 };
+
     // generate theme unlock check event
     lcf::rpg::Event theme_unlock_event;
     theme_unlock_event.ID = 25;
     theme_unlock_event.name = "GET_THEME_STATUS";
     theme_unlock_event.x = 19;
     theme_unlock_event.y = 14;
-    counter = 1;
+    int counter = 1;
     for (theme i : theme_list) {
         lcf::rpg::EventPage page;
         page.ID = counter;
@@ -159,13 +197,6 @@ int book(std::string project, QWidget *parent) {
     // replace events
     counter = 0;
     std::unique_ptr<lcf::rpg::Map> map = lcf::LMU_Reader::Load(project + "/Map0009.lmu", "UTF-8");
-    for (auto i : map->events) {
-        if (i.ID == 22) {
-            map->events[counter] = cover_event;
-            break;
-        }
-        counter++;
-    }
     counter = 0;
     for (auto i : map->events) {
         if (i.ID == 25) {
@@ -188,12 +219,9 @@ int book(std::string project, QWidget *parent) {
         if (i.ID == 36) {
             for (lcf::rpg::EventCommand &j : map->events[counter].pages[0].event_commands) {
                 if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
-                    && j.parameters[1] == 111) {
-                    j.parameters[5] = cover_count;
-                }
-                if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
                     && j.parameters[1] == 115) {
                     j.parameters[5] = theme_count;
+                    break;
                 }
             }
             break;
