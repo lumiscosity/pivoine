@@ -124,7 +124,7 @@ int run_cover(std::string project, QWidget *parent){
             for (lcf::rpg::EventCommand &j : map->events[counter].pages[0].event_commands) {
                 if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
                     && j.parameters[1] == 111) {
-                    j.parameters[5] = cover_count;
+                    j.parameters[5] = cover_count - 1;
                     break;
                 }
             }
@@ -226,7 +226,7 @@ int run_theme(std::string project, QWidget *parent) {
             for (lcf::rpg::EventCommand &j : map->events[counter].pages[0].event_commands) {
                 if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
                     && j.parameters[1] == 115) {
-                    j.parameters[5] = theme_count;
+                    j.parameters[5] = theme_count - 1;
                     break;
                 }
             }
