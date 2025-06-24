@@ -20,6 +20,10 @@ private slots:
 
     void on_rpPushButton_clicked();
 
+void on_coverPushButton_clicked();
+
+void on_themePushButton_clicked();
+
 private:
     Ui::ProjectWindow *ui;
     QString project;

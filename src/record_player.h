@@ -263,7 +263,7 @@ void gen_play_footer(std::vector<lcf::rpg::EventCommand> &v) {
     v.push_back(label2);
 }
 
-int record_player(std::string project, QWidget *parent) {
+int run_record_player(std::string project, QWidget *parent) {
     // load the record player data as a csv
     QList<QList<track>> track_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the record player data", "", "Tab separated values (*.tsv)"));
@@ -395,7 +395,7 @@ int record_player(std::string project, QWidget *parent) {
         }
         counter++;
     }
-    lcf::LMU_Reader::Save("Map0007.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
+    lcf::LMU_Reader::Save(project + "/Map0007.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
 
     return 0;
 }

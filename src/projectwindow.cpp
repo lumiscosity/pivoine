@@ -1,4 +1,5 @@
 #include "projectwindow.h"
+#include "book.h"
 #include "record_player.h"
 #include "ui_projectwindow.h"
 
@@ -31,12 +32,25 @@ void ProjectWindow::on_projectPushButton_clicked()
         ui->projectTextLabel->setText(this->project);
     }
     ui->rpPushButton->setEnabled(!dirty);
-    ui->bookPushButton->setEnabled(!dirty);
+    ui->coverPushButton->setEnabled(!dirty);
+    ui->themePushButton->setEnabled(!dirty);
 }
 
 
 void ProjectWindow::on_rpPushButton_clicked()
 {
-    record_player(this->project.toStdString(), this);
+    run_record_player(this->project.toStdString(), this);
+}
+
+
+void ProjectWindow::on_coverPushButton_clicked()
+{
+    run_cover(this->project.toStdString(), this);
+}
+
+
+void ProjectWindow::on_themePushButton_clicked()
+{
+    run_theme(this->project.toStdString(), this);
 }
 

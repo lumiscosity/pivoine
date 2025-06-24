@@ -12,15 +12,20 @@
 
 std::vector<lcf::rpg::EventCommand> gen_check(QList<Condition> &list, int32_t depth) {
     std::vector<lcf::rpg::EventCommand> v;
-    v.push_back(list.last().command(depth));
+    lcf::rpg::EventCommand switchon;
+    switchon.code = int(lcf::rpg::EventCommand::Code::ControlSwitches);
+    switchon.indent = depth + 1;
+    switchon.parameters = { 0, 1, 1, 0 };
     if (!list.isEmpty()){
+        v.push_back(list.last().command(depth));
         list.pop_back();
+    } else {
+        // handling for automatic unlock
+        switchon.indent = 0;
+        v.push_back(switchon);
+        return v;
     }
     if (list.isEmpty()) {
-        lcf::rpg::EventCommand switchon;
-        switchon.code = int(lcf::rpg::EventCommand::Code::ControlSwitches);
-        switchon.indent = depth + 1;
-        switchon.parameters = { 0, 1, 1, 0 };
         v.push_back(switchon);
     } else {
         for (auto i : gen_check(list, depth + 1)) {
@@ -50,20 +55,24 @@ QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
     }
     if (!raw.isEmpty()){
         for (QString i : raw.split("]")) {
-            QStringList temp = i.last(i.length() - 1).split(",");
-            Condition next_cond(temp[0].last(temp[0].length() - 1).first(temp[0].length() - 2), {temp[1].toInt(), temp[2].toInt(), temp[3].toInt(), temp[4].toInt(), temp[5].toInt(), temp[6].toInt()});
+            if (!i.isEmpty()){
+                QStringList temp = i.last(i.length() - 1).split(",");
+                Condition next_cond(temp[0].last(temp[0].length() - 1).first(temp[0].length() - 2), {temp[1].toInt(), temp[2].toInt(), temp[3].toInt(), temp[4].toInt(), temp[5].toInt(), temp[6].toInt()});
+                c.push_back(next_cond);
+            }
         }
     }
     return c;
 }
 
-int gen_cover(std::string project, QWidget *parent){
+int run_cover(std::string project, QWidget *parent){
     // load the cover data as a csv
     QList<cover> cover_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the cover data", "", "Tab separated values (*.tsv)"));
     if (f.open(QFile::ReadOnly | QFile::Text)){
         QTextStream in(&f);
         QString s;
+        in.readLine();
         while (in.readLineInto(&s)) {
             QStringList split = s.split("\t");
             if (split.size() >= 7) {
@@ -123,20 +132,21 @@ int gen_cover(std::string project, QWidget *parent){
         }
         counter++;
     }
-    lcf::LMU_Reader::Save("Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
+    lcf::LMU_Reader::Save(project + "/Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
 
 
     return 0;
 }
 
 
-int gen_theme(std::string project, QWidget *parent) {
+int run_theme(std::string project, QWidget *parent) {
     // load the theme data as a csv
     QList<theme> theme_list;
     QFile theme_f(QFileDialog::getOpenFileName(parent, "Select the theme data", "", "Tab separated values (*.tsv)"));
     if (theme_f.open(QFile::ReadOnly | QFile::Text)){
         QTextStream in(&theme_f);
         QString s;
+        in.readLine();
         while (in.readLineInto(&s)) {
             QStringList split = s.split("\t");
             if (split.size() >= 7) {
@@ -187,15 +197,11 @@ int gen_theme(std::string project, QWidget *parent) {
         setter.indent = 0;
         setter.string = ToDBString(i.file);
         setter.parameters = {i.tiling == "tile", 1};
-        page.event_commands.push_back(switchoff);
-        for (auto j : gen_check(i.cond, 0)) {
-            page.event_commands.push_back(j);
-        }
+        page.event_commands.push_back(setter);
         theme_equip_event.pages.push_back(page);
     }
 
     // replace events
-    counter = 0;
     std::unique_ptr<lcf::rpg::Map> map = lcf::LMU_Reader::Load(project + "/Map0009.lmu", "UTF-8");
     counter = 0;
     for (auto i : map->events) {
@@ -228,7 +234,7 @@ int gen_theme(std::string project, QWidget *parent) {
         }
         counter++;
     }
-    lcf::LMU_Reader::Save("Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
+    lcf::LMU_Reader::Save(project + "/Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
 
 
     return 0;
