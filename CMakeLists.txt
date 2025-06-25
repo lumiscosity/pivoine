@@ -34,6 +34,8 @@ add_executable(pivoine
   src/record_player.h
   src/book.h
   src/book_data.h
+  src/cover.h
+  src/theme.h
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)

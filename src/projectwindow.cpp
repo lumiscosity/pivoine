@@ -2,6 +2,8 @@
 #include "book.h"
 #include "record_player.h"
 #include "ui_projectwindow.h"
+#include "cover.h"
+#include "theme.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
