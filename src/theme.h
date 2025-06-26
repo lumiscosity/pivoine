@@ -11,19 +11,17 @@
 
 #include <lcf/rpg/event.h>
 
-QPixmap generate_getbox(QString filename) {
-    QPixmap dest(272, 32);
-    dest.fill(Qt::transparent);
+QPixmap transparentify(QString filename) {
     QImage raw_source(filename);
-    QImage new_source(272, 32, QImage::Format_RGBA8888);
+    QImage new_source(raw_source.width(), raw_source.height(), QImage::Format_RGBA8888);
     new_source.fill(Qt::transparent);
     if (raw_source.isNull()) {
         throw std::invalid_argument(filename.toStdString());
     }
-    QPixmap source(272, 32);
+    QPixmap source(raw_source.width(), raw_source.height());
     if (raw_source.format() == QImage::Format_Indexed8) {
-        for (int x = 0; x < 272; x++) {
-            for (int y = 0; y < 32; y++) {
+        for (int x = 0; x < raw_source.width(); x++) {
+            for (int y = 0; y < raw_source.height(); y++) {
                 if (raw_source.pixelIndex(x, y) != 0) {
                     new_source.setPixel(x, y, raw_source.color(raw_source.pixelIndex(x, y)));
                 }
@@ -33,8 +31,29 @@ QPixmap generate_getbox(QString filename) {
     } else {
         source.convertFromImage(raw_source);
     }
+    return source;
+}
+
+QPixmap generate_theme_preview(QString filename) {
+    QPixmap dest(32, 32);
+    dest.fill(Qt::transparent);
+    QPixmap source = transparentify(filename);
     QPainter painter;
     painter.begin(&dest);
+
+    painter.drawPixmap(QRect(0, 0, 272, 32), source.copy(QRect(0, 0, 32, 32)));
+    painter.drawPixmap(QRect(0, 0, 272, 32), source.copy(QRect(32, 0, 32, 32)));
+
+    return dest;
+}
+
+QPixmap generate_getbox(QString filename) {
+    QPixmap dest(272, 32);
+    dest.fill(Qt::transparent);
+    QPixmap source = transparentify(filename);
+    QPainter painter;
+    painter.begin(&dest);
+
     // draw background
     painter.drawTiledPixmap(QRect(0, 0, 272, 32), source.copy(QRect(0, 0, 32, 32)));
     // draw corners
@@ -48,6 +67,7 @@ QPixmap generate_getbox(QString filename) {
     painter.drawPixmap(QRect(264, 8, 8, 16), source.copy(QRect(56, 8, 8, 16))); // right
     painter.drawTiledPixmap(QRect(8, 24, 256, 8), source.copy(QRect(40, 24, 16, 8))); // bottom
     painter.end();
+
     return dest;
 }
 
@@ -148,11 +168,14 @@ int run_theme(std::string project, QWidget *parent) {
     }
     lcf::LMU_Reader::Save(project + "/Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
 
-    // generate assets (getbox, book name/author, book preview)
+    // generate assets (getbox, book preview, book name/author)
     counter = 0;
     for (theme i : theme_list) {
-        generate_getbox(QString::fromStdString(project) + "/System/" + i.file + ".png")
+        QString path = QString::fromStdString(project) + "/System/" + i.file + ".png";
+        generate_getbox(path)
             .save(QString::fromStdString(project) + "/Picture/getbox_" + QString::number(counter).rightJustified(3, QChar(48)) + ".png");
+        generate_theme_preview(path)
+            .save(QString::fromStdString(project) + "/Picture/book/mpreview" + QString::number(counter).rightJustified(3, QChar(48)) + ".png");
         counter++;
     }
 

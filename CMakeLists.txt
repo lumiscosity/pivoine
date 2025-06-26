@@ -36,6 +36,7 @@ add_executable(pivoine
   src/book_data.h
   src/cover.h
   src/theme.h
+  src/text.h
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)
