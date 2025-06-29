@@ -1,13 +1,14 @@
 #pragma once
 
 #include "book_data.h"
-#include "lcf/lmu/reader.h"
+#include "text.h"
 #include <lcf/rpg/event.h>
 #include <lcf/rpg/eventcommand.h>
 #include <lcf/rpg/eventpage.h>
 #include <QFile>
 #include <QFileDialog>
 #include <QRegularExpression>
+#include <QPainter>
 
 
 std::vector<lcf::rpg::EventCommand> gen_check(QList<Condition> &list, int32_t depth) {
@@ -63,4 +64,22 @@ QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
         }
     }
     return c;
+}
+
+QPixmap gen_book_name(const Font &font, int id, QString name) {
+    QPixmap p(320, 24);
+    QPainter painter(&p);
+    QPoint anchor(6, 5);
+    QColor text_color = Qt::white;
+    draw_small_text_l(font, painter, anchor, name, text_color);
+    return p;
+}
+
+QPixmap gen_book_author(const Font &font, int id, QString name) {
+    QPixmap p(320, 24);
+    QPainter painter(&p);
+    QPoint anchor(314, 5);
+    QColor text_color = Qt::white;
+    draw_small_text_r(font, painter, anchor, name, text_color);
+    return p;
 }

@@ -2,6 +2,7 @@
 
 #include "book.h"
 #include "book_data.h"
+#include "lcf/lmu/reader.h"
 
 #include <QFile>
 #include <QFileDialog>
@@ -173,9 +174,9 @@ int run_theme(std::string project, QWidget *parent) {
     for (theme i : theme_list) {
         QString path = QString::fromStdString(project) + "/System/" + i.file + ".png";
         generate_getbox(path)
-            .save(QString::fromStdString(project) + "/Picture/getbox_" + QString::number(counter).rightJustified(3, QChar(48)) + ".png");
+            .save(QString::fromStdString(project) + "/Picture/getbox_" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         generate_theme_preview(path)
-            .save(QString::fromStdString(project) + "/Picture/book/mpreview" + QString::number(counter).rightJustified(3, QChar(48)) + ".png");
+            .save(QString::fromStdString(project) + "/Picture/book/mpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         counter++;
     }
 

@@ -10,13 +10,14 @@
 //  Each number is a bit field representing which pixels are filled or blank in that row.
 //  When converted to a binary string, 1s are filled pixels, 0s are blank.
 
-
 #include <QList>
 #include <QHash>
 #include <QPainter>
 
-QHash<int, QList<int>> gen_text_qhash() {
-    QHash<int, QList<int>> h;
+using Font = QHash<int, QList<int>>;
+
+Font gen_text_qhash() {
+    Font h;
     h.insert(33,{0,28,28,28,28,28,28,12,12,0,0,12,12,0,0,0});
     h.insert(34,{0,0,108,44,4,0,0,0,0,0,0,0,0,0,0,0});
     h.insert(35,{0,0,216,216,216,1020,216,72,1020,216,216,216,0,0,0,0});
@@ -124,7 +125,8 @@ QHash<int, QList<int>> gen_text_qhash() {
     return h;
 }
 
-void draw_small_text_l(const QHash<int, QList<int>> &font, QPainter &painter, QPoint pos, QString text, QColor color) {
+// Left-adjusted drawing routine
+void draw_small_text_l(const Font &font, QPainter &painter, QPoint pos, QString text, QColor color) {
     int x = pos.x();
     int y = pos.y();
     int bearing_x = 2;
@@ -148,7 +150,8 @@ void draw_small_text_l(const QHash<int, QList<int>> &font, QPainter &painter, QP
     }
 }
 
-void draw_small_text_r(const QHash<int, QList<int>> &font, QPainter &painter, QPoint pos, QString text, QColor color) {
+// Right-adjusted drawing routine
+void draw_small_text_r(const Font &font, QPainter &painter, QPoint pos, QString text, QColor color) {
     int bearing_x = 2;
     int space_size = 5;
     int total_size = -1;
