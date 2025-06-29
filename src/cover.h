@@ -133,18 +133,20 @@ int run_cover(std::string project, QWidget *parent){
     for (cover i : cover_list) {
         QString path = covers_path.absolutePath() + QString::number(counter).rightJustified(4, QChar(48)) + ".png";
         QPixmap cover_image(path);
-        if (cover_image.width() == 218 && cover_image.height() == 282){
-            gen_cover_anim(cover_image, book_draw_assets)
+        if (!cover_image.isNull()){
+            if (cover_image.width() == 218 && cover_image.height() == 282){
+                gen_cover_anim(cover_image, book_draw_assets)
                 .save(QString::fromStdString(project) + "/Picture/book/cover" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
-            gen_cover_preview(cover_image)
-                .save(QString::fromStdString(project) + "/Picture/book/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
-            gen_book_name(font, counter, i.name)
-                .save(QString::fromStdString(project) + "/Picture/book/cname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
-            gen_book_author(font, counter, i.author)
-                .save(QString::fromStdString(project) + "/Picture/book/cauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
-        } else {
-            QMessageBox::warning(parent, "Warning", "The cover image at " + path + " isn't 218 by 282! Skipping.");
+                gen_cover_preview(cover_image)
+                    .save(QString::fromStdString(project) + "/Picture/book/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            } else {
+                QMessageBox::warning(parent, "Warning", "The cover image at " + path + " isn't 218 by 282! Skipping.");
+            }
         }
+        gen_book_name(font, counter, i.name)
+            .save(QString::fromStdString(project) + "/Picture/book/cname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+        gen_book_author(font, counter, i.author)
+            .save(QString::fromStdString(project) + "/Picture/book/cauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         counter++;
     }
 
