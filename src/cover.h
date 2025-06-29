@@ -6,11 +6,53 @@
 
 #include <QFile>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QWidget>
 
 #include <lcf/rpg/event.h>
 
+struct BookDrawAssets {
+    BookDrawAssets(QPixmap dark0, QPixmap dark1, QPixmap dark2, QPixmap light0,
+                   QPixmap light1, QPixmap light2)
+        : dark0(std::move(dark0)), dark1(std::move(dark1)),
+        dark2(std::move(dark2)), light0(std::move(light0)),
+        light1(std::move(light1)), light2(std::move(light2)) {}
+    QPixmap dark0;
+    QPixmap dark1;
+    QPixmap dark2;
+    QPixmap light0;
+    QPixmap light1;
+    QPixmap light2;
+};
 
+QPixmap sheared(QPixmap pixmap, double left, double wscale, double rise, double slope) {
+    QTransform transform;
+    transform.setMatrix(1/wscale, 0, (-left+slope)/wscale, slope, 1, -left*slope+rise, 0, 0, 0);
+    return pixmap.transformed(transform, Qt::FastTransformation);
+}
+
+QPixmap gen_cover_anim(QPixmap cover, BookDrawAssets assets) {
+    QPixmap p(320, 720); // 320, 240 * 3
+    QPainter painter(&p);
+    // frame 0
+    painter.drawPixmap(45, 0, cover);
+    painter.drawPixmap(0, 0, assets.dark0);
+    painter.drawPixmap(0, 0, assets.light0);
+    // frame 1
+    painter.drawPixmap(45, 240, sheared(cover, 45, 0.057798, 1, 0.19565));
+    painter.drawPixmap(0, 240, assets.dark1);
+    painter.drawPixmap(0, 240, assets.light1);
+    // frame 2
+    painter.drawPixmap(45, 480, sheared(cover, 43, 0.43119266, 5, 0.4849));
+    painter.drawPixmap(45, 480, sheared(cover, 43, 0.40825, 1, 0.4849));
+    painter.drawPixmap(0, 480, assets.dark2);
+    painter.drawPixmap(0, 480, assets.light2);
+    return p;
+}
+
+inline QPixmap gen_cover_preview(QPixmap cover) {
+    return cover.scaled(54, 70, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+}
 
 int run_cover(std::string project, QWidget *parent){
     // load the cover data as a csv
@@ -81,6 +123,30 @@ int run_cover(std::string project, QWidget *parent){
     }
     lcf::LMU_Reader::Save(project + "/Map0009.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
 
+
+
+    // generate assets (full cover anim, book preview, book name/author)
+    BookDrawAssets book_draw_assets(QPixmap("/assets/dark0"), QPixmap("/assets/dark1"), QPixmap("/assets/dark2"), QPixmap("/assets/light0"), QPixmap("/assets/light1"), QPixmap("/assets/light2"));
+    QDir covers_path = QFileDialog::getExistingDirectory(parent, "Select the directory containing the raw cover files:");
+    counter = 0;
+    Font font = gen_text_qhash();
+    for (cover i : cover_list) {
+        QString path = covers_path.absolutePath() + QString::number(counter).rightJustified(4, QChar(48)) + ".png";
+        QPixmap cover_image(path);
+        if (cover_image.width() == 218 && cover_image.height() == 282){
+            gen_cover_anim(cover_image, book_draw_assets)
+                .save(QString::fromStdString(project) + "/Picture/book/cover" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            gen_cover_preview(cover_image)
+                .save(QString::fromStdString(project) + "/Picture/book/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            gen_book_name(font, counter, i.name)
+                .save(QString::fromStdString(project) + "/Picture/book/cname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            gen_book_author(font, counter, i.author)
+                .save(QString::fromStdString(project) + "/Picture/book/cauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+        } else {
+            QMessageBox::warning(parent, "Warning", "The cover image at " + path + " isn't 218 by 282! Skipping.");
+        }
+        counter++;
+    }
 
     return 0;
 }

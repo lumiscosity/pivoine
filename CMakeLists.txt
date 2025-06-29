@@ -37,6 +37,7 @@ add_executable(pivoine
   src/cover.h
   src/theme.h
   src/text.h
+  pivoine.qrc
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)
