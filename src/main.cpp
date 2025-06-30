@@ -30,11 +30,6 @@ int main(int argc, char *argv[])
     d.show();
     a.exec();
 
-    // check if the map file exists
-    if (!QFile::exists("Map0007.lmu")) {
-        printf("Map0007.lmu not found in the Pivoine executable directory! Insert the file and try again.");
-        return 1;
-    }
 
     return 0;
 }

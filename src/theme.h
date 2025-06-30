@@ -81,9 +81,12 @@ int run_theme(std::string project, QWidget *parent) {
         QString s;
         in.readLine();
         while (in.readLineInto(&s)) {
-            QStringList split = s.split("\t");
-            if (split.size() >= 7) {
-                theme_list.append(theme(split[1].trimmed(), split[2].trimmed(), split[3].trimmed(), split[4].trimmed(), gen_condition_list(0, split[5].toInt(), 0, split[6])));
+            QString s_copy = s;
+            if (!s_copy.right(s_copy.length()-4).replace("\t", "").isEmpty()){
+                QStringList split = s.split("\t");
+                if (split.size() >= 7) {
+                    theme_list.append(theme(split[1].trimmed(), split[2].trimmed(), split[3].trimmed(), split[4].trimmed(), gen_condition_list(0, split[5].toInt(), 0, split[6])));
+                }
             }
         }
     } else {

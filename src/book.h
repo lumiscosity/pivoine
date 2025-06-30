@@ -68,6 +68,7 @@ QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
 
 QPixmap gen_book_name(const Font &font, int id, QString name) {
     QPixmap p(320, 24);
+    p.fill(Qt::transparent);
     QPainter painter(&p);
     QPoint anchor(6, 5);
     QColor text_color = Qt::white;
@@ -77,6 +78,7 @@ QPixmap gen_book_name(const Font &font, int id, QString name) {
 
 QPixmap gen_book_author(const Font &font, int id, QString name) {
     QPixmap p(320, 24);
+    p.fill(Qt::transparent);
     QPainter painter(&p);
     QPoint anchor(314, 5);
     QColor text_color = Qt::white;

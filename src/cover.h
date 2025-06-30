@@ -7,9 +7,11 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include <lcf/rpg/event.h>
+#include <QLabel>
 
 struct BookDrawAssets {
     BookDrawAssets(QPixmap dark0, QPixmap dark1, QPixmap dark2, QPixmap light0,
@@ -26,13 +28,20 @@ struct BookDrawAssets {
 };
 
 QPixmap sheared(QPixmap pixmap, double left, double wscale, double rise, double slope) {
-    QTransform transform;
-    transform.setMatrix(1/wscale, 0, (-left+slope)/wscale, slope, 1, -left*slope+rise, 0, 0, 0);
+    QTransform transform(1/wscale, 0, (-left+slope)/wscale, slope, 1, -left*slope+rise, 1, 1, 1);
+    //QDialog preview;
+    //QVBoxLayout layout;
+    //QLabel preview_test;
+    //preview.setLayout(&layout);
+    //preview_test.setPixmap(pixmap.transformed(transform, Qt::FastTransformation));
+    //layout.addWidget(&preview_test);
+    //preview.exec();
     return pixmap.transformed(transform, Qt::FastTransformation);
 }
 
 QPixmap gen_cover_anim(QPixmap cover, BookDrawAssets assets) {
     QPixmap p(320, 720); // 320, 240 * 3
+    p.fill(Qt::transparent);
     QPainter painter(&p);
     // frame 0
     painter.drawPixmap(45, 0, cover);
@@ -63,9 +72,12 @@ int run_cover(std::string project, QWidget *parent){
         QString s;
         in.readLine();
         while (in.readLineInto(&s)) {
-            QStringList split = s.split("\t");
-            if (split.size() >= 7) {
-                cover_list.append(cover(split[1].trimmed(), split[2].trimmed(), gen_condition_list(split[3].toInt(), split[4].toInt(), split[5].toInt(), split[6])));
+            QString s_copy = s;
+            if (!s_copy.right(s_copy.length()-4).replace("\t", "").isEmpty()){
+                QStringList split = s.split("\t");
+                if (split.size() >= 7) {
+                    cover_list.append(cover(split[1].trimmed(), split[2].trimmed(), gen_condition_list(split[3].toInt(), split[4].toInt(), split[5].toInt(), split[6])));
+                }
             }
         }
     } else {
@@ -126,12 +138,12 @@ int run_cover(std::string project, QWidget *parent){
 
 
     // generate assets (full cover anim, book preview, book name/author)
-    BookDrawAssets book_draw_assets(QPixmap("/assets/dark0"), QPixmap("/assets/dark1"), QPixmap("/assets/dark2"), QPixmap("/assets/light0"), QPixmap("/assets/light1"), QPixmap("/assets/light2"));
+    BookDrawAssets book_draw_assets(QPixmap(":/dark0"), QPixmap(":/dark1"), QPixmap(":/dark2"), QPixmap(":/light0"), QPixmap(":/light1"), QPixmap(":/light2"));
     QDir covers_path = QFileDialog::getExistingDirectory(parent, "Select the directory containing the raw cover files:");
     counter = 0;
     Font font = gen_text_qhash();
     for (cover i : cover_list) {
-        QString path = covers_path.absolutePath() + QString::number(counter).rightJustified(4, QChar(48)) + ".png";
+        QString path = covers_path.absolutePath() + "/" + QString::number(counter).rightJustified(4, QChar(48)) + ".png";
         QPixmap cover_image(path);
         if (!cover_image.isNull()){
             if (cover_image.width() == 218 && cover_image.height() == 282){
