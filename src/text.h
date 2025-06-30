@@ -131,7 +131,7 @@ void draw_small_text_l(const Font &font, QPainter &painter, QPoint pos, QString 
     int y = pos.y();
     int bearing_x = 2;
     int space_size = 5;
-    painter.setBrush(QBrush(color));
+    painter.setPen(color);
     for (QChar c : text) {
         int size = 0;
         if (font.contains(c.unicode())) {
@@ -141,7 +141,7 @@ void draw_small_text_l(const Font &font, QPainter &painter, QPoint pos, QString 
                 for (int cx = 0; cx < 16; cx++) {
                     if (row & (0b1 << cx)) {
                         painter.drawPoint(cx-bearing_x+x, cy+y);
-                        int size = std::max(size, cx-bearing_x);
+                        size = std::max(size, cx-bearing_x);
                     }
                 }
             }
@@ -155,7 +155,7 @@ void draw_small_text_r(const Font &font, QPainter &painter, QPoint pos, QString 
     int bearing_x = 2;
     int space_size = 5;
     int total_size = -1;
-    painter.setBrush(QBrush(color));
+    painter.setPen(color);
     for (QChar c : text) {
         int size = 0;
         if (font.contains(c.unicode())) {
@@ -164,7 +164,7 @@ void draw_small_text_r(const Font &font, QPainter &painter, QPoint pos, QString 
                 int row = bitmap[cy];
                 for (int cx = 0; cx < 16; cx++) {
                     if (row & (0b1 << cx)) {
-                        int size = std::max(size, cx-bearing_x);
+                        size = std::max(size, cx-bearing_x);
                     }
                 }
             }
@@ -182,7 +182,7 @@ void draw_small_text_r(const Font &font, QPainter &painter, QPoint pos, QString 
                 for (int cx = 0; cx < 16; cx++) {
                     if (row & (0b1 << cx)) {
                         painter.drawPoint(cx-bearing_x+x, cy+y);
-                        int size = std::max(size, cx-bearing_x);
+                        size = std::max(size, cx-bearing_x);
                     }
                 }
             }
