@@ -41,18 +41,34 @@ void ProjectWindow::on_projectPushButton_clicked()
 
 void ProjectWindow::on_rpPushButton_clicked()
 {
-    run_record_player(this->project.toStdString(), this);
+    int run = run_record_player(this->project.toStdString(), this);
+    if (!run) {
+        QMessageBox::information(this, "Finished", "Record player updated!");
+    } else if (run != 1) {
+        QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
+    }
+
 }
 
 
 void ProjectWindow::on_coverPushButton_clicked()
 {
-    run_cover(this->project.toStdString(), this);
+    int run = run_cover(this->project.toStdString(), this);
+    if (!run) {
+        QMessageBox::information(this, "Finished", "Covers updated!");
+    } else if (run != 1) {
+        QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
+    }
 }
 
 
 void ProjectWindow::on_themePushButton_clicked()
 {
-    run_theme(this->project.toStdString(), this);
+    int run = run_theme(this->project.toStdString(), this);
+    if (!run) {
+        QMessageBox::information(this, "Finished", "Themes updated!");
+    } else if (run != 1) {
+        QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
+    }
 }
 
