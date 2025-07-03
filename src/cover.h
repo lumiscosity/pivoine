@@ -91,11 +91,6 @@ int run_cover(std::string project, QWidget *parent){
         return 1;
     }
 
-    lcf::rpg::EventCommand switchoff;
-    switchoff.code = int(lcf::rpg::EventCommand::Code::ControlSwitches);
-    switchoff.indent = 0;
-    switchoff.parameters = { 0, 1, 1, 1 };
-
     // generate cover unlock check event
     lcf::rpg::Event cover_event;
     cover_event.ID = 22;
@@ -107,7 +102,6 @@ int run_cover(std::string project, QWidget *parent){
         lcf::rpg::EventPage page;
         page.ID = counter;
         counter++;
-        page.event_commands.push_back(switchoff);
         for (auto j : gen_check(i.cond, 0)) {
             page.event_commands.push_back(j);
         }
