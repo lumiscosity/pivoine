@@ -264,7 +264,7 @@ void gen_play_footer(std::vector<lcf::rpg::EventCommand> &v) {
 }
 
 int run_record_player(std::string project, QWidget *parent) {
-    // load the record player data as a csv
+    // load the record player data as a tsv
     QList<QList<track>> track_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the record player data", "", "Tab separated values (*.tsv)"));
     if (f.open(QFile::ReadOnly | QFile::Text)){
@@ -383,7 +383,7 @@ int run_record_player(std::string project, QWidget *parent) {
     // bump max counts
     counter = 0;
     for (auto i : map->events) {
-        if (i.ID == 36) {
+        if (i.ID == 3) {
             for (lcf::rpg::EventCommand &j : map->events[counter].pages[0].event_commands) {
                 if (j.code == int(lcf::rpg::EventCommand::Code::ControlVars)
                     && j.parameters[1] == 144) {
