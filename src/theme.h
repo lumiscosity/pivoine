@@ -42,8 +42,8 @@ QPixmap generate_theme_preview(QString filename) {
     QPainter painter;
     painter.begin(&dest);
 
-    painter.drawPixmap(QRect(0, 0, 272, 32), source.copy(QRect(0, 0, 32, 32)));
-    painter.drawPixmap(QRect(0, 0, 272, 32), source.copy(QRect(32, 0, 32, 32)));
+    painter.drawPixmap(QRect(0, 0, 32, 32), source.copy(QRect(0, 0, 32, 32)));
+    painter.drawPixmap(QRect(0, 0, 32, 32), source.copy(QRect(32, 0, 32, 32)));
 
     return dest;
 }
@@ -171,21 +171,21 @@ int run_theme(std::string project, QWidget *parent) {
     Font font = gen_text_qhash();
     for (theme i : theme_list) {
         QString path = QString::fromStdString(project) + "/System/" + i.file + ".png";
-        if (!QFile::exists(QString::fromStdString(project) + "/Picture/getbox_" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
+        if (!QFile::exists(QString::fromStdString(project) + "/Picture/menu/getbox_" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
             generate_getbox(path)
-            .save(QString::fromStdString(project) + "/Picture/getbox_" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            .save(QString::fromStdString(project) + "/Picture/menu/getbox_" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         }
-        if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/mpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")){
+        if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/menu/mpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")){
             generate_theme_preview(path)
-            .save(QString::fromStdString(project) + "/Picture/book/mpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            .save(QString::fromStdString(project) + "/Picture/book/menu/mpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         }
-        if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/mname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
+        if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/menu/mname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
             gen_book_name(font, counter, i.name)
-                .save(QString::fromStdString(project) + "/Picture/book/mname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                .save(QString::fromStdString(project) + "/Picture/book/menu/mname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         }
-        if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/mauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
+        if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/menu/mauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
             gen_book_author(font, counter, i.author)
-            .save(QString::fromStdString(project) + "/Picture/book/mauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+            .save(QString::fromStdString(project) + "/Picture/book/menu/mauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
         }
         counter++;
     }
