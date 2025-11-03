@@ -73,7 +73,7 @@ QPixmap generate_getbox(QString filename) {
 }
 
 int run_theme(std::string project, QWidget *parent) {
-    // load the theme data as a csv
+    // load the theme data as a tsv
     QList<theme> theme_list;
     QFile theme_f(QFileDialog::getOpenFileName(parent, "Select the theme data", "", "Tab separated values (*.tsv)"));
     if (theme_f.open(QFile::ReadOnly | QFile::Text)){

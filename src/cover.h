@@ -28,15 +28,10 @@ struct BookDrawAssets {
 };
 
 QImage sheared(QImage image, double left, double wscale, double rise, double slope) {
-    QTransform transform(1/wscale, 0, (-left+slope)/wscale, slope, 1, -left*slope+rise);
-    //QDialog preview;
-    //QVBoxLayout layout;
-    //QLabel preview_test;
-    //preview.setLayout(&layout);
-    //preview_test.setPixmap(image.transformed(transform, Qt::FastTransformation).toPixmap());
-    //layout.addWidget(&preview_test);
-    //preview.exec();
-        return image.transformed(transform.inverted(), Qt::FastTransformation);
+    QTransform transform(1.0/wscale,             slope,            0.0,
+                         0.0,                    1.0,                0.0,
+                         (-left+slope)/wscale, -left*slope+rise, 1.0);
+    return image.transformed(transform, Qt::FastTransformation);
 }
 
 QImage gen_cover_anim(QImage cover, BookDrawAssets assets) {
@@ -45,20 +40,20 @@ QImage gen_cover_anim(QImage cover, BookDrawAssets assets) {
     QPainter painter(&p);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     // frame 0
-    painter.drawImage(45, 0, cover.copy(QRect(0, 0, 320, 240)));
+    painter.drawImage(45, 0, sheared(cover, 45, 1, 0, 0));
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
     painter.drawImage(0, 0, assets.dark0);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawImage(0, 0, assets.light0);
     // frame 1
-    painter.drawImage(45, 240, sheared(cover, 45, 0.057798, 1, 0.19565).copy(QRect(0, 0, 320, 240)));
+    painter.drawImage(45, 240, sheared(cover, 45, 0.057798, 1, 0.19565), 0, 0, 320, 240);
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
     painter.drawImage(0, 240, assets.dark1);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawImage(0, 240, assets.light1);
     // frame 2
-    painter.drawImage(45, 480, sheared(cover, 43, 0.43119266, 5, 0.4849).copy(QRect(0, 0, 320, 240)));
-    painter.drawImage(45, 480, sheared(cover, 43, 0.40825, 1, 0.4849).copy(QRect(0, 0, 320, 240)));
+    painter.drawImage(45, 480, sheared(cover, 43, 0.43119266, 5, 0.4849));
+    painter.drawImage(45, 480, sheared(cover, 43, 0.40825, 1, 0.4849));
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
     painter.drawImage(0, 480, assets.dark2);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -71,7 +66,7 @@ inline QImage gen_cover_preview(QImage cover) {
 }
 
 int run_cover(std::string project, QWidget *parent){
-    // load the cover data as a csv
+    // load the cover data as a tsv
     QList<cover> cover_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the cover data", "", "Tab separated values (*.tsv)"));
     if (f.open(QFile::ReadOnly | QFile::Text)){
