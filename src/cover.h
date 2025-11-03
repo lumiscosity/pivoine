@@ -142,7 +142,7 @@ int run_cover(std::string project, QWidget *parent){
     BookDrawAssets book_draw_assets(QImage(":/dark0"), QImage(":/dark1"), QImage(":/dark2"), QImage(":/light0"), QImage(":/light1"), QImage(":/light2"));
     QDir covers_path = QFileDialog::getExistingDirectory(parent, "Select the directory containing the raw cover files:");
     counter = 0;
-    Font font = gen_text_qhash();
+    BookFont font = gen_text_qhash();
     for (cover i : cover_list) {
         QString path = covers_path.absolutePath() + "/" + QString::number(counter).rightJustified(4, QChar(48)) + ".png";
         QImage cover_image(path);

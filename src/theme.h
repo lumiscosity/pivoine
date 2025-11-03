@@ -168,7 +168,7 @@ int run_theme(std::string project, QWidget *parent) {
 
     // generate assets (getbox, book preview, book name/author)
     counter = 0;
-    Font font = gen_text_qhash();
+    BookFont font = gen_text_qhash();
     for (theme i : theme_list) {
         QString path = QString::fromStdString(project) + "/System/" + i.file + ".png";
         if (!QFile::exists(QString::fromStdString(project) + "/Picture/menu/getbox_" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {

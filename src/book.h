@@ -1,7 +1,7 @@
 #pragma once
 
 #include "book_data.h"
-#include "text.h"
+#include "book_text.h"
 #include <lcf/rpg/event.h>
 #include <lcf/rpg/eventcommand.h>
 #include <lcf/rpg/eventpage.h>
@@ -66,7 +66,7 @@ QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
     return c;
 }
 
-QPixmap gen_book_name(const Font &font, int id, QString name) {
+QPixmap gen_book_name(const BookFont &font, int id, QString name) {
     QPixmap p(320, 24);
     p.fill(Qt::transparent);
     QPainter painter(&p);
@@ -76,7 +76,7 @@ QPixmap gen_book_name(const Font &font, int id, QString name) {
     return p;
 }
 
-QPixmap gen_book_author(const Font &font, int id, QString name) {
+QPixmap gen_book_author(const BookFont &font, int id, QString name) {
     QPixmap p(320, 24);
     p.fill(Qt::transparent);
     QPainter painter(&p);
