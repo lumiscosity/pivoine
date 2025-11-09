@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 project(pivoine LANGUAGES CXX)
 
@@ -24,7 +24,8 @@ else(USE_SYSTEM_LIBLCF)
         add_liblcf()
 endif(USE_SYSTEM_LIBLCF)
 
-add_executable(pivoine
+qt_add_executable(pivoine
+  MANUAL_FINALIZATION
   third_party/dbstring.h
   src/main.cpp
   src/projectwindow.cpp
@@ -37,6 +38,7 @@ add_executable(pivoine
   src/cover.h
   src/theme.h
   src/book_text.h
+  LICENSE
   pivoine.qrc
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
@@ -44,6 +46,7 @@ target_link_libraries(pivoine PRIVATE lcf)
 
 include(GNUInstallDirs)
 install(TARGETS pivoine
+    BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
