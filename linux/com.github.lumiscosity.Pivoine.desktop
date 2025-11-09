@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Pivoine
-GenericName=CU Record Player Generator
-Comment=CU Record Player Generator
+GenericName=CU Data Generator
+Comment=Collective Unconscious data generator
 Exec=pivoine %U
 Icon=com.github.lumiscosity.Pivoine
 Terminal=false

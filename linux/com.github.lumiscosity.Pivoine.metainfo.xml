@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
         <name>Pivoine</name>
-        <summary>CU Record Player Generator</summary>
+        <summary>Collective Unconscious data generator</summary>
         <id>com.github.lumiscosity.Pivoine</id>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
@@ -26,6 +26,6 @@
         <url type="vcs-browser">https://github.com/lumiscosity/pivoine</url>
 
 	<description>
-                <p>CU Record Player Generator</p>
+                <p>Collective Unconscious data generator</p>
 	</description>
 </component>
