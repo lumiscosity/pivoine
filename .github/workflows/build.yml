@@ -45,7 +45,7 @@ jobs:
       with:
         name: pivoine-windows-x86_64
         path: |
-          C:\a\pivoine\pivoine\builds\
+          C:/a/pivoine/pivoine/builds/
 
   flatpak:
     name: 'Linux/Flatpak'
