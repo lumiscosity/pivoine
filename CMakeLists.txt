@@ -37,7 +37,8 @@ qt_add_executable(pivoine
   src/book_data.h
   src/cover.h
   src/theme.h
-  src/book_text.h
+  src/text.h
+  src/font.h
   LICENSE
   pivoine.qrc
 )
