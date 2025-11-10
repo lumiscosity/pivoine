@@ -85,6 +85,16 @@
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="QCheckBox" name="overwriteCheckBox">
+     <property name="text">
+      <string>Overwrite images if they exist</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

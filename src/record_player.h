@@ -285,7 +285,7 @@ QImage gen_record_description(Font size_16, Font size_14, Font size_12, QString 
     return p;
 }
 
-int run_record_player(std::string project, QWidget *parent) {
+int run_record_player(std::string project, QWidget *parent, bool overwrite) {
     // load the record player data as a tsv
     QList<QList<track>> track_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the record player data", "", "Tab separated values (*.tsv)"));
@@ -429,31 +429,25 @@ int run_record_player(std::string project, QWidget *parent) {
         int ci = 0;
         for (track j : i) {
             QStringList split = {j.location.section(':', 0, 0), j.location.section(':', 1)};
-            if (split.size() == 1) {
-                gen_record_description(size_16, size_14, size_12, split[0], "", j.track_file)
-                    .save(QString::fromStdString(project)
-                        + "/Picture/record_player/description_"
-                        + QString::number(counter).rightJustified(4, QChar(48))
-                        + QString::number(ci).rightJustified(2, QChar(48))
-                        + ".png"
-                    );
-            } else if (split.size() == 2) {
-                gen_record_description(size_16, size_14, size_12, split[0], split[1], j.track_file)
-                .save(QString::fromStdString(project)
-                      + "/Picture/record_player/description_"
-                      + QString::number(counter).rightJustified(4, QChar(48))
-                      + QString::number(ci).rightJustified(2, QChar(48))
-                      + ".png"
-                    );
-            } else {
-                QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " is missing a location!");
-                gen_record_description(size_16, size_14, size_12, "", "", j.track_file)
-                    .save(QString::fromStdString(project)
-                          + "/Picture/record_player/description_"
-                          + QString::number(counter).rightJustified(4, QChar(48))
-                          + QString::number(ci).rightJustified(2, QChar(48))
-                          + ".png"
-                          );
+            QString desc_fname(QString::fromStdString(project)
+                               + "/Picture/record_player/description_"
+                               + QString::number(counter).rightJustified(4, QChar(48))
+                               + QString::number(ci).rightJustified(2, QChar(48))
+                               + ".png"
+            );
+
+            if (!QFile::exists(desc_fname) || overwrite) {
+                if (split.size() == 1) {
+                    gen_record_description(size_16, size_14, size_12, split[0], "", j.track_file)
+                        .save(desc_fname);
+                } else if (split.size() == 2) {
+                    gen_record_description(size_16, size_14, size_12, split[0], split[1], j.track_file)
+                        .save(desc_fname);
+                } else {
+                    QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " is missing a location!");
+                    gen_record_description(size_16, size_14, size_12, "", "", j.track_file)
+                        .save(desc_fname);
+                }
             }
             ci++;
         }

@@ -65,7 +65,7 @@ inline QImage gen_cover_preview(QImage cover) {
     return cover.scaled(54, 70, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
-int run_cover(std::string project, QWidget *parent){
+int run_cover(std::string project, QWidget *parent, bool overwrite){
     // load the cover data as a tsv
     QList<cover> cover_list;
     QFile f(QFileDialog::getOpenFileName(parent, "Select the cover data", "", "Tab separated values (*.tsv)"));
@@ -143,21 +143,25 @@ int run_cover(std::string project, QWidget *parent){
         QImage cover_image(path);
         if (!cover_image.isNull()){
             if (cover_image.width() == 218 && cover_image.height() == 282) {
-                if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/cover/cover" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")){
+                QString anim_fname(QString::fromStdString(project) + "/Picture/book/cover/cover" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                if (!QFile::exists(anim_fname) || overwrite) {
                     gen_cover_anim(cover_image, book_draw_assets)
-                    .save(QString::fromStdString(project) + "/Picture/book/cover/cover" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                        .save(anim_fname);
                 }
-                if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/cover/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")){
+                QString cover_fname(QString::fromStdString(project) + "/Picture/book/cover/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                if (!QFile::exists(cover_fname) || overwrite){
                     gen_cover_preview(cover_image)
-                    .save(QString::fromStdString(project) + "/Picture/book/cover/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                        .save(cover_fname);
                 }
-                if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/cover/cname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
+                QString cname_fname(QString::fromStdString(project) + "/Picture/book/cover/cname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                if (!QFile::exists(cname_fname) || overwrite) {
                     gen_book_name(font, counter, i.name)
-                    .save(QString::fromStdString(project) + "/Picture/book/cover/cname" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                        .save(cname_fname);
                 }
-                if (!QFile::exists(QString::fromStdString(project) + "/Picture/book/cover/cauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png")) {
+                QString cauthor_fname(QString::fromStdString(project) + "/Picture/book/cover/cauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                if (!QFile::exists(cauthor_fname) || overwrite) {
                     gen_book_author(font, counter, i.author)
-                    .save(QString::fromStdString(project) + "/Picture/book/cover/cauthor" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
+                        .save(cauthor_fname);
                 }
             } else {
                 QMessageBox::warning(parent, "Warning", "The cover image at " + path + " isn't 218 by 282! Skipping.");
