@@ -430,7 +430,7 @@ int run_record_player(std::string project, QWidget *parent) {
         for (track j : i) {
             QStringList split = {j.location.section(':', 0, 0), j.location.section(':', 1)};
             if (split.size() == 1) {
-                gen_record_description(size_16, size_14, size_12, split[0], "", j.artist)
+                gen_record_description(size_16, size_14, size_12, split[0], "", j.track_file)
                     .save(QString::fromStdString(project)
                         + "/Picture/record_player/description_"
                         + QString::number(counter).rightJustified(4, QChar(48))
@@ -438,7 +438,7 @@ int run_record_player(std::string project, QWidget *parent) {
                         + ".png"
                     );
             } else if (split.size() == 2) {
-                gen_record_description(size_16, size_14, size_12, split[0], split[1], j.artist)
+                gen_record_description(size_16, size_14, size_12, split[0], split[1], j.track_file)
                 .save(QString::fromStdString(project)
                       + "/Picture/record_player/description_"
                       + QString::number(counter).rightJustified(4, QChar(48))
@@ -447,7 +447,7 @@ int run_record_player(std::string project, QWidget *parent) {
                     );
             } else {
                 QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " is missing a location!");
-                gen_record_description(size_16, size_14, size_12, "", "", j.artist)
+                gen_record_description(size_16, size_14, size_12, "", "", j.track_file)
                     .save(QString::fromStdString(project)
                           + "/Picture/record_player/description_"
                           + QString::number(counter).rightJustified(4, QChar(48))
