@@ -135,7 +135,7 @@ int run_cover(std::string project, QWidget *parent, bool overwrite){
 
     // generate assets (full cover anim, book preview, book name/author)
     BookDrawAssets book_draw_assets(QImage(":/dark0"), QImage(":/dark1"), QImage(":/dark2"), QImage(":/light0"), QImage(":/light1"), QImage(":/light2"));
-    QDir covers_path = QFileDialog::getExistingDirectory(parent, "Select the directory containing the raw cover files:");
+    QDir covers_path = QFileDialog::getExistingDirectory(parent, "Select the directory containing the raw cover files (as XXXX.png):");
     counter = 0;
     Font font = gen_book_font();
     for (cover i : cover_list) {
