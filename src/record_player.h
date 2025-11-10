@@ -1,7 +1,9 @@
 #pragma once
 
 #include "../third_party/dbstring.h"
+#include "font.h"
 #include "lcf/lmu/reader.h"
+#include "text.h"
 #include "track.h"
 
 #include <lcf/rpg/event.h>
@@ -10,6 +12,8 @@
 #include <QTextStream>
 #include <QFileDialog>
 #include <qfile.h>
+#include <QPainter>
+#include <QMessageBox>
 
 void gen_unlock_check_header(int type, int id, std::vector<lcf::rpg::EventCommand> &v) {
     // conditional branch header
@@ -263,6 +267,24 @@ void gen_play_footer(std::vector<lcf::rpg::EventCommand> &v) {
     v.push_back(label2);
 }
 
+QImage gen_record_description(Font size_16, Font size_14, Font size_12, QString title, QString subtitle, QString author) {
+    QSize desc_imgsize(320, 240);
+    QPoint map_name_anchor(7, 194);
+    QPoint sub_area_anchor(21, 207);
+    QPoint track_anchor(45, 221);
+    QColor text_color = Qt::white;
+    QImage p(desc_imgsize, QImage::Format_Mono);
+    p.fill(Qt::transparent);
+    QPainter painter(&p);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    draw_text_l(size_16, painter, map_name_anchor, title, text_color);
+    draw_text_l(size_12, painter, sub_area_anchor, subtitle, text_color);
+    draw_text_l(size_14, painter, track_anchor, author, text_color);
+
+    // filename = "description_" + entry[3] + ".png"
+    return p;
+}
+
 int run_record_player(std::string project, QWidget *parent) {
     // load the record player data as a tsv
     QList<QList<track>> track_list;
@@ -396,6 +418,40 @@ int run_record_player(std::string project, QWidget *parent) {
         counter++;
     }
     lcf::LMU_Reader::Save(project + "/Map0007.lmu", *map, lcf::EngineVersion::e2k3, "UTF-8");
+
+    // generate pictures
+    Font size_16 = gen_rfont_size_16();
+    Font size_14 = gen_rfont_size_14();
+    Font size_12 = gen_rfont_size_12();
+
+    counter = 0;
+    for (QList<track> i : track_list) {
+        int ci = 0;
+        for (track j : i) {
+            QStringList split = {j.location.section(':', 0, 0), j.location.section(':', 1)};
+            if (split.size() == 1) {
+                gen_record_description(size_16, size_14, size_12, split[0], "", j.artist)
+                    .save(QString::fromStdString(project)
+                        + "/Picture/record_player/description_"
+                        + QString::number(counter).rightJustified(4, QChar(48))
+                        + QString::number(ci).rightJustified(2, QChar(48))
+                        + ".png"
+                    );
+            } else if (split.size() == 2) {
+                gen_record_description(size_16, size_14, size_12, split[0], split[1], j.artist)
+                .save(QString::fromStdString(project)
+                      + "/Picture/record_player/description_"
+                      + QString::number(counter).rightJustified(4, QChar(48))
+                      + QString::number(ci).rightJustified(2, QChar(48))
+                      + ".png"
+                    );
+            } else {
+                QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " is missing a location! Skipping.");
+            }
+            ci++;
+        }
+        counter++;
+    }
 
     return 0;
 }
