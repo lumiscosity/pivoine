@@ -446,7 +446,14 @@ int run_record_player(std::string project, QWidget *parent) {
                       + ".png"
                     );
             } else {
-                QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " is missing a location! Skipping.");
+                QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " is missing a location!");
+                gen_record_description(size_16, size_14, size_12, "", "", j.artist)
+                    .save(QString::fromStdString(project)
+                          + "/Picture/record_player/description_"
+                          + QString::number(counter).rightJustified(4, QChar(48))
+                          + QString::number(ci).rightJustified(2, QChar(48))
+                          + ".png"
+                          );
             }
             ci++;
         }
