@@ -47,7 +47,7 @@ int run_reservation_list(std::string project, QWidget *parent) {
             out << db_to_q(i.name).trimmed()+"\n";
         }
 
-        // If this returns 0, somebody saved the database without Maniacs
+        // If this returns 0 stringvars, somebody saved the database without Maniacs
         // That unfortunately removes the stringvar chunk
 
         out << "STRING VARIABLES,"+QString::number(database->maniac_string_variables.size())+"\n";
