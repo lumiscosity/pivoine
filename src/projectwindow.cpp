@@ -1,6 +1,7 @@
 #include "projectwindow.h"
 #include "book.h"
 #include "record_player.h"
+#include "reservation_list.h"
 #include "ui_projectwindow.h"
 #include "cover.h"
 #include "theme.h"
@@ -36,6 +37,7 @@ void ProjectWindow::on_projectPushButton_clicked()
     ui->rpPushButton->setEnabled(!dirty);
     ui->coverPushButton->setEnabled(!dirty);
     ui->themePushButton->setEnabled(!dirty);
+    ui->reservationListPushButton->setEnabled(!dirty);
 }
 
 
@@ -67,6 +69,16 @@ void ProjectWindow::on_themePushButton_clicked()
     int run = run_theme(this->project.toStdString(), this, ui->overwriteCheckBox->isChecked());
     if (!run) {
         QMessageBox::information(this, "Finished", "Themes updated!");
+    } else if (run != 1) {
+        QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
+    }
+}
+
+void ProjectWindow::on_reservationListPushButton_clicked()
+{
+    int run = run_reservation_list(this->project.toStdString(), this);
+    if (!run) {
+        QMessageBox::information(this, "Finished", "Reservation list file generated!");
     } else if (run != 1) {
         QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
     }
