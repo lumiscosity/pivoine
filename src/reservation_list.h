@@ -47,13 +47,13 @@ int run_reservation_list(std::string project, QWidget *parent) {
             out << db_to_q(i.name).trimmed()+"\n";
         }
 
-        // If this returns 0 stringvars, somebody saved the database without Maniacs
-        // That unfortunately removes the stringvar chunk
+        // Saving the database without Maniacs clears the stringvar chunk
+        // Commenting this out until this is resolved
 
-        out << "STRING VARIABLES,"+QString::number(database->maniac_string_variables.size())+"\n";
-        for (lcf::rpg::StringVariable i : database->maniac_string_variables) {
-            out << db_to_q(i.name).trimmed()+"\n";
-        }
+        //out << "STRING VARIABLES,"+QString::number(database->maniac_string_variables.size())+"\n";
+        //for (lcf::rpg::StringVariable i : database->maniac_string_variables) {
+        //    out << db_to_q(i.name).trimmed()+"\n";
+        //}
 
         out << "TILESETS,"+QString::number(database->chipsets.size())+"\n";
         for (lcf::rpg::Chipset i : database->chipsets) {
