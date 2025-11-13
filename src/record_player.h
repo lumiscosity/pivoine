@@ -96,7 +96,7 @@ void gen_play_header(std::vector<lcf::rpg::EventCommand> &v) {
 
 lcf::DBArray<int32_t> unlock_condition_branch_params(track track) {
     if (track.skill) {
-        return { 5, 2, 4, track.skill, 0, 1 };
+        return { 5, 3, 4, track.skill, 0, 1 };
     } else if (track.map_id) {
         return { 5, 2, 4, track.map_id, 0, 1 };
     }
