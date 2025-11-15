@@ -65,6 +65,11 @@ int run_reservation_list(std::string project, QWidget *parent) {
             out << db_to_q(i.name).trimmed()+"\n";
         }
 
+        out << "TERRAINS,"+QString::number(database->terrains.size())+"\n";
+        for (lcf::rpg::Terrain i : database->terrains) {
+            out << db_to_q(i.name).trimmed()+"\n";
+        }
+
         f.close();
     } else {
         return 1;
