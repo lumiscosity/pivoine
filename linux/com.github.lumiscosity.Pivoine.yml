@@ -24,10 +24,8 @@ cleanup:
 modules:
   - name: liblcf
     buildsystem: cmake-ninja
-    build-options:
-        cxx-flags:
-            - "-B ./build"
     config-opts:
+      - -B="./build" 
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DLIBLCF_ENABLE_TOOLS=OFF
       - -DLIBLCF_WITH_XML=OFF
