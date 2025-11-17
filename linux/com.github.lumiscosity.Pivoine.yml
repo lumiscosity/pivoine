@@ -25,7 +25,7 @@ modules:
   - name: liblcf
     buildsystem: cmake-ninja
     config-opts:
-      - -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="./build" 
+      - -B="./build" 
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DLIBLCF_ENABLE_TOOLS=OFF
       - -DLIBLCF_WITH_XML=OFF
