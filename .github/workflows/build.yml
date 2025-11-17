@@ -61,10 +61,8 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
-    - uses: awalsh128/cache-apt-pkgs-action@v1
-      with:
-        packages: libinih-dev
-        version: 1.0
+    - name: Install inih
+      run: sudo apt-get install -y libinih-dev
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         bundle: pivoine-linux.flatpak
