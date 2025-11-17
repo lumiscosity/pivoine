@@ -30,8 +30,8 @@ modules:
         sha256: 9c15fa751bb8093d042dae1b9f125eb45198c32c6704cd5481ccde460d4f8151
   - name: liblcf
     buildsystem: cmake-ninja
+    builddir: true
     config-opts:
-      - -B=build
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DLIBLCF_ENABLE_TOOLS=OFF
       - -DLIBLCF_WITH_XML=OFF
