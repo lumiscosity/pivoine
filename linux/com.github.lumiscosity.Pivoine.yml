@@ -22,10 +22,16 @@ cleanup:
   - /lib/cmake
 
 modules:
+  - name: inih
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://github.com/benhoyt/inih/archive/refs/tags/r62.tar.gz
+        sha256: 9c15fa751bb8093d042dae1b9f125eb45198c32c6704cd5481ccde460d4f8151
   - name: liblcf
     buildsystem: cmake-ninja
     config-opts:
-      - -B="./build" 
+      - -B=build
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DLIBLCF_ENABLE_TOOLS=OFF
       - -DLIBLCF_WITH_XML=OFF
