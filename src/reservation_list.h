@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../third_party/dbstring.h"
 #include "lcf/ldb/reader.h"
 #include "lcf/lmt/reader.h"
 #include <QFile>
@@ -7,10 +8,6 @@
 #include <QWidget>
 #include <lcf/rpg/treemap.h>
 #include <lcf/rpg/database.h>
-
-inline QString db_to_q(lcf::DBString string) {
-    return QString::fromStdString(ToString(string));
-}
 
 int run_reservation_list(std::string project, QWidget *parent) {
     QFile f(QFileDialog::getSaveFileName(parent, "Reservation list file destination", "names.txt", "names.txt (*.txt)"));
@@ -23,7 +20,7 @@ int run_reservation_list(std::string project, QWidget *parent) {
         for (lcf::rpg::MapInfo i : maptree->maps) {
             // ignore root map
             if (i.ID != 0) {
-                QString name = db_to_q(i.name);
+                QString name = ToQString(i.name);
                 // remove leading ID
                 if (name.size() <= 4) {
                     out << "\n";
@@ -39,12 +36,12 @@ int run_reservation_list(std::string project, QWidget *parent) {
 
         out << "SWITCHES,"+QString::number(database->switches.size())+"\n";
         for (lcf::rpg::Switch i : database->switches) {
-            out << db_to_q(i.name).trimmed()+"\n";
+            out << ToQString(i.name).trimmed()+"\n";
         }
 
         out << "VARIABLES,"+QString::number(database->variables.size())+"\n";
         for (lcf::rpg::Variable i : database->variables) {
-            out << db_to_q(i.name).trimmed()+"\n";
+            out << ToQString(i.name).trimmed()+"\n";
         }
 
         // Saving the database without Maniacs clears the stringvar chunk
@@ -52,22 +49,22 @@ int run_reservation_list(std::string project, QWidget *parent) {
 
         // out << "STRING VARIABLES,"+QString::number(database->maniac_string_variables.size())+"\n";
         // for (lcf::rpg::StringVariable i : database->maniac_string_variables) {
-        //     out << db_to_q(i.name).trimmed()+"\n";
+        //     out << ToQString(i.name).trimmed()+"\n";
         // }
 
         out << "TILESETS,"+QString::number(database->chipsets.size())+"\n";
         for (lcf::rpg::Chipset i : database->chipsets) {
-            out << db_to_q(i.name).trimmed()+"\n";
+            out << ToQString(i.name).trimmed()+"\n";
         }
 
         out << "BATTLE ANIMATIONS,"+QString::number(database->animations.size())+"\n";
         for (lcf::rpg::Animation i : database->animations) {
-            out << db_to_q(i.name).trimmed()+"\n";
+            out << ToQString(i.name).trimmed()+"\n";
         }
 
         out << "TERRAINS,"+QString::number(database->terrains.size())+"\n";
         for (lcf::rpg::Terrain i : database->terrains) {
-            out << db_to_q(i.name).trimmed()+"\n";
+            out << ToQString(i.name).trimmed()+"\n";
         }
 
         f.close();
