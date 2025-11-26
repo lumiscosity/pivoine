@@ -4,7 +4,6 @@
 #include "font.h"
 #include "lcf/lmu/reader.h"
 #include "text.h"
-#include "track.h"
 
 #include <lcf/rpg/event.h>
 #include <lcf/rpg/map.h>
@@ -14,6 +13,17 @@
 #include <qfile.h>
 #include <QPainter>
 #include <QMessageBox>
+
+struct track {
+    track(QString track_file, QString artist, int volume, int speed, QString location, int map_id, int skill = 0) : track_file(track_file), artist(artist), volume(volume), speed(speed), location(location), map_id(map_id), skill(skill) {}
+    QString track_file;
+    QString artist;
+    int volume;
+    int speed;
+    QString location;
+    int map_id;
+    int skill = 0;
+};
 
 void gen_unlock_check_header(int type, int id, std::vector<lcf::rpg::EventCommand> &v) {
     // conditional branch header
