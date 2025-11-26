@@ -97,8 +97,8 @@ void gen_play_header(std::vector<lcf::rpg::EventCommand> &v) {
 lcf::DBArray<int32_t> unlock_condition_branch_params(track track) {
     if (track.skill) {
         return { 5, 3, 4, track.skill, 0, 1 };
-    } else if (track.map_id) {
-        return { 5, 2, 4, track.map_id, 0, 1 };
+    } else if (!track.map_id.isEmpty()) {
+        return { 5, 2, 4, track.map_id[0], 0, 1 };
     }
     return {};
 }
@@ -149,7 +149,7 @@ std::vector<lcf::rpg::EventCommand> gen_play_check_branch(int32_t depth, QList<t
 
 std::vector<lcf::rpg::EventCommand> gen_play_play_branch(int32_t depth, track track) {
     std::vector<lcf::rpg::EventCommand> c;
-    if (track.map_id || track.skill) {
+    if (track.map_id[0] || track.skill) {
         lcf::rpg::EventCommand branch_head;
         branch_head.indent = depth;
         branch_head.code = int(lcf::rpg::EventCommand::Code::ConditionalBranch);
@@ -287,26 +287,8 @@ QImage gen_record_description(Font size_16, Font size_14, Font size_12, QString 
 
 int run_record_player(std::string project, QWidget *parent, bool overwrite) {
     // load the record player data as a tsv
-    QList<QList<track>> track_list;
-    QFile f(QFileDialog::getOpenFileName(parent, "Select the record player data", "", "Tab separated values (*.tsv)"));
-    if (f.open(QFile::ReadOnly | QFile::Text)){
-        QTextStream in(&f);
-        QString s;
-        while (in.readLineInto(&s)) {
-            QStringList split = s.split("\t");
-            if (split.size() >= 7) {
-                bool has_id = split[0].isEmpty();
-                if (has_id) {
-                    track_list.last().append(track(split[1].trimmed(), split[2], split[3].toInt(), split[4].toInt(), split[5], split[6].toInt(), split[7].toInt()));
-                } else {
-                    QList<track> temp;
-                    temp.append(track(split[1].trimmed(), split[2], split[3].toInt(), split[4].toInt(), split[5], split[6].toInt(), split[7].toInt()));
-                    track_list.append(temp);
-                }
-            }
-        }
-        track_list.pop_front();
-    } else {
+    QList<QList<track>> track_list = load_track_list(parent);
+    if (track_list.isEmpty()) {
         return 1;
     }
 
@@ -334,12 +316,19 @@ int run_record_player(std::string project, QWidget *parent, bool overwrite) {
         // unlock check
         lcf::rpg::EventPage p_unlock;
         p_unlock.ID = counter;
+        int ci = 0;
         for (track j : i) {
-            if (j.map_id != 0 || j.skill != 0) {
-                gen_unlock_check_header(int(j.skill != 0), j.skill != 0 ? j.skill : j.map_id, p_unlock.event_commands);
+            // if both the map id and skill are empty, the track is unlocked automatically
+            if (j.map_id.size() > 1 && j.skill == 0) {
+                QMessageBox::critical(parent, "Error", "Track" + QString::number(counter) + "variation" + QString::number(ci) + "is assigned to more than one map, but has no skill switch! Aborting.");
+                return 3;
+            }
+            if (j.map_id[0] != 0 || j.skill != 0) {
+                gen_unlock_check_header(int(j.skill != 0), j.skill != 0 ? j.skill : j.map_id[0], p_unlock.event_commands);
             } else {
                 p_unlock.event_commands.push_back(mul9);
             }
+            ci++;
         }
         unlock_check_event.pages.push_back(p_unlock);
         // play command
@@ -353,7 +342,7 @@ int run_record_player(std::string project, QWidget *parent, bool overwrite) {
         // the check branch only exists if none of the grouped tracks are auto-unlocked
         bool dirty = false;
         for (auto j : i) {
-            dirty = dirty || (!j.map_id && !j.skill);
+            dirty = dirty || (!j.map_id[0] && !j.skill);
         }
         auto tl_copy = i;
         if (!dirty) {
