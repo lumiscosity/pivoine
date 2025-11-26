@@ -31,6 +31,7 @@ qt_add_executable(pivoine
   src/projectwindow.cpp
   src/projectwindow.h
   src/projectwindow.ui
+  src/track.h
   src/record_player.h
   src/book.h
   src/book_data.h
