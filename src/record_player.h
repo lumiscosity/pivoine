@@ -439,19 +439,6 @@ int run_record_player(std::string project, QWidget *parent, bool overwrite) {
                         .save(desc_fname);
                 }
             }
-
-            // check for missing music files while we're here
-            if (!(
-                    QFile::exists(check_path + j.track_file + ".wav")
-                    || QFile::exists(check_path + j.track_file + ".mp3")
-                    || QFile::exists(check_path + j.track_file + ".ogg")
-                    || QFile::exists(check_path + j.track_file + ".opus")
-                    || QFile::exists(check_path + j.track_file + ".mid")
-                    // i'm not adding a full rtp filename list for this exception
-                    || j.track_file == "SERain"
-                )) {
-                QMessageBox::warning(parent, "Warning", "Track " + QString::number(counter) + " variation " + QString::number(ci) + " refers to the music file " + j.track_file + ", which is missing!");
-            }
             ci++;
         }
         counter++;

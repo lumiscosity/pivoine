@@ -43,6 +43,9 @@ qt_add_executable(pivoine
   src/giant_vm.h
   LICENSE
   pivoine.qrc
+  src/validate_rp_dialog.h
+  src/validate_rp_dialog.cpp
+  src/validate_rp_dialog.ui
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)
