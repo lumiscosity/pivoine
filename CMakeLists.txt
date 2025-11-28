@@ -46,6 +46,7 @@ qt_add_executable(pivoine
   src/validate_rp_dialog.h
   src/validate_rp_dialog.cpp
   src/validate_rp_dialog.ui
+  src/track.cpp
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)

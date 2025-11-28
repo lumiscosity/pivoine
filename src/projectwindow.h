@@ -1,5 +1,4 @@
-#ifndef PROJECTWINDOW_H
-#define PROJECTWINDOW_H
+#pragma once
 
 #include <QWidget>
 
@@ -30,5 +29,3 @@ private:
     Ui::ProjectWindow *ui;
     QString project;
 };
-
-#endif // PROJECTWINDOW_H
