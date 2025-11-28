@@ -25,6 +25,8 @@ void on_themePushButton_clicked();
 
 void on_reservationListPushButton_clicked();
 
+void on_validateRPPushButton_clicked();
+
 private:
     Ui::ProjectWindow *ui;
     QString project;

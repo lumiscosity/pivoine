@@ -5,6 +5,7 @@
 #include "ui_projectwindow.h"
 #include "cover.h"
 #include "theme.h"
+#include "validate_rp_dialog.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -82,5 +83,13 @@ void ProjectWindow::on_reservationListPushButton_clicked()
     } else if (run != 1) {
         QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
     }
+}
+
+
+void ProjectWindow::on_validateRPPushButton_clicked()
+{
+    ValidateRPDialog dialog(this->project, this);
+    dialog.validate();
+    dialog.exec();
 }
 

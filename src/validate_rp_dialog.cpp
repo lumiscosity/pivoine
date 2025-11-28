@@ -6,6 +6,15 @@
 
 #include <QMessageBox>
 
+struct call_tuple {
+    int skill;
+    QSet<int> map = QSet<int>();
+    int trigger_map;
+    int trigger_id;
+    int trigger_x;
+    int trigger_y;
+};
+
 void insert_or_create(QHash<int, QSet<int>> &dest, int key, int value) {
     // we have defaultdict at home
     if (dest.keys().contains(key)) {
@@ -35,7 +44,7 @@ void ValidateRPDialog::validate()
 {
     QList<QList<track>> tracks = load_track_list(this);
     QString check_path = this->project + "/Music/";
-    QSet<int> tsv_skill_ids;
+    QHash<int, QList<int>> tsv_skill_ids;
 
     int co = 0;
     for (QList<track> i : tracks) {
@@ -49,14 +58,14 @@ void ValidateRPDialog::validate()
                   QFile::exists(check_path + j.track_file + ".mid")
                   // i'm not adding a full rtp filename list for this exception
                   || j.track_file == "SERain")) {
-                push("Track " + QString::number(co) + " variation " + QString::number(ci) +
+                push("- Track " + QString::number(co) + " variation " + QString::number(ci) +
                      " refers to the music file " + j.track_file +
-                     ", which is missing!\n");
+                     ", which is missing!");
             }
 
             // store used skill ids for later
             if (j.skill != 0) {
-                tsv_skill_ids.insert(j.skill);
+                tsv_skill_ids.insert(j.skill, j.map_id);
             }
 
             ci++;
@@ -69,6 +78,7 @@ void ValidateRPDialog::validate()
     QDir maps_dir(this->project);
     QHash<int, QSet<int>> maps_per_skill;
     QHash<int, QSet<int>> skills_per_map;
+    QList<call_tuple> calls;
 
     maps_dir.setNameFilters(QStringList("*.lmu"));
     for (QFileInfo i : maps_dir.entryInfoList()) {
@@ -84,18 +94,21 @@ void ValidateRPDialog::validate()
                     }
                 }
             }
-            // second pass: populate maps_per_skill and skills_per_map
+            // second pass: populate maps_per_skill, skills_per_map and calls
             for (auto k : j.pages) {
                 for (lcf::rpg::EventCommand l : k.event_commands) {
                     if (l.code == int(lcf::rpg::EventCommand::Code::ChangeSkills)) {
                         // ignore the book updater
                         if (!(map_id == 9 && j.ID == 37)) {
                             // only check for changes to the record player actor
-                            if (l.parameters[1] == 3) {
+                            if (l.parameters[1] == 3 && l.parameters[3] == 0) {
+                                call_tuple potential{l.parameters[4], QSet<int>(), map_id, j.ID, j.x, j.y};
                                 for (int m : transfers) {
                                     insert_or_create(maps_per_skill, l.parameters[4], m);
                                     insert_or_create(skills_per_map, m, l.parameters[4]);
+                                    potential.map.insert(m);
                                 }
+                                calls.push_back(potential);
                             }
                         }
                     }
@@ -105,20 +118,40 @@ void ValidateRPDialog::validate()
         map.reset();
     }
 
-    // check for unused skills getting set
-    for (int i : maps_per_skill.keys()) {
-        if (!tsv_skill_ids.contains(i)) {
-            for (int j : maps_per_skill.value(i)) {
-                push("Map " + QString::number(j) +
-                     " sets unused skill " + QString::number(i) +
-                     "!\n");
-            }
+
+    // check for skills which don't get set
+    for (int i : tsv_skill_ids.keys()) {
+        if (!maps_per_skill.keys().contains(i)) {
+            push("- Skill " + QString::number(i) +
+                 " is present on the sheet, but never set!");
         }
     }
-    // check for skills which don't get set
-    for (int i : tsv_skill_ids - QSet(maps_per_skill.keys().begin(), maps_per_skill.keys().end())) {
-        push("Skill " + QString::number(i) +
-             " is never set!\n");
+    // check for skills which get set in the wrong map and unused skills getting set
+    for (call_tuple i : calls) {
+        if (tsv_skill_ids.keys().contains(i.skill)) {
+            bool found = false;
+            for (int j : tsv_skill_ids.value(i.skill)) {
+                found = found || i.map.contains(j);
+            }
+            QString maps;
+            for (int j : i.map) {
+                maps.append(QString::number(j) + ", ");
+            }
+            maps.removeLast();
+            maps.removeLast();
+            if (!found) {
+                push("- Skill " + QString::number(i.skill) +
+                     " is set in map " + QString::number(i.trigger_map) +
+                     " in EV" + QString::number(i.trigger_id) +
+                     " at (" + QString::number(i.trigger_x) + "," + QString::number(i.trigger_y) +
+                     ") when it shouldn't be!");
+            }
+        } else {
+            push("- Map " + QString::number(i.trigger_map) +
+                 " sets unused skill " + QString::number(i.skill) +
+                 " in EV" + QString::number(i.trigger_id) +
+                 " at (" + QString::number(i.trigger_x) + "," + QString::number(i.trigger_y) +
+                 ")!");
+        }
     }
-    // TODO: check for skills which get set in the wrong map
 }

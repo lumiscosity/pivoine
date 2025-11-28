@@ -112,6 +112,16 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="validateRPPushButton">
+     <property name="toolTip">
+      <string>This might take a while!</string>
+     </property>
+     <property name="text">
+      <string>Validate record player</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
