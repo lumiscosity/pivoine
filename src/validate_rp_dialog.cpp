@@ -63,6 +63,17 @@ void ValidateRPDialog::validate()
                      ", which is missing!");
             }
 
+            // check if the background file exists
+            if (!(QFile::exists(this->project
+                                + "/Picture/record_player/background_"
+                                + QString::number(co).rightJustified(4, QChar(48))
+                                + QString::number(ci).rightJustified(2, QChar(48))
+                                + ".png"))) {
+                push("- The background for track " + QString::number(co) +
+                     " variation " + QString::number(ci) +
+                     " is missing!");
+            }
+
             // store used skill ids for later
             if (j.skill != 0) {
                 tsv_skill_ids.insert(j.skill, j.map_id);
