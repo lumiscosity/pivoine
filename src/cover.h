@@ -15,31 +15,15 @@
 
 struct BookDrawAssets {
     BookDrawAssets(QImage dark, QImage light0,
-                   QImage light1, QImage light2)
+                   QImage light1, QImage light2, QImage light3)
         : dark(std::move(dark)), light0(std::move(light0)),
-        light1(std::move(light1)), light2(std::move(light2)) {}
+        light1(std::move(light1)), light2(std::move(light2)), light3(std::move(light3)) {}
     QImage dark;
     QImage light0;
     QImage light1;
     QImage light2;
+    QImage light3;
 };
-
-void pil_draw_image_add (QImage &in1, QImage &in2) {
-    // The effect seems more intense in PIL than in Qt?
-    for (int x = 0; x <= in1.width(); x++) {
-        for (int y = 0; y <= in1.height(); y++) {
-            QColor in1_color(in1.pixelColor(x,y));
-            QColor in2_color(in2.pixelColor(x,y));
-            QColor out_color(
-                in1_color.red() + in2_color.red(),
-                in1_color.green() + in2_color.green(),
-                in1_color.blue() + in2_color.blue(),
-                in1_color.alpha() + in2_color.alpha()
-                );
-            in1.setPixelColor(x, y, out_color);
-        }
-    }
-}
 
 void pil_draw_image_multiply(QImage &in1, QImage &in2) {
     // Qt bug: multiply breaks with transparency, so we have to reimplement it
@@ -90,17 +74,20 @@ QImage gen_cover_anim(QImage cover, BookDrawAssets assets) {
     painter.drawImage(0, 0, sheared(cover, 45, 1, 0, 0));
     painter.setCompositionMode(QPainter::CompositionMode_Plus);
     painter.drawImage(0, 0, assets.light0);
+    painter.drawImage(0, 0, assets.light0);
     // frame 1
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawImage(0, 240, sheared(cover, 45, 0.857798, 1, 0.19565), 0, 0, 320, 240);
     painter.setCompositionMode(QPainter::CompositionMode_Plus);
     painter.drawImage(0, 240, assets.light1);
+    painter.drawImage(0, 240, assets.light1);
     // frame 2
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 480, sheared(cover, 43, 0.40825, 5, 0.4849));
     painter.drawImage(0, 480, sheared(cover, 43, 0.43119266, 5, 0.4849));
+    painter.drawImage(0, 480, sheared(cover, 43, 0.40825, 5, 0.4849));
     painter.setCompositionMode(QPainter::CompositionMode_Plus);
     painter.drawImage(0, 480, assets.light2);
+    painter.drawImage(0, 480, assets.light3);
     painter.end();
 
     pil_draw_image_multiply(p, assets.dark);
@@ -180,7 +167,7 @@ int run_cover(std::string project, QWidget *parent, bool overwrite){
 
 
     // generate assets (full cover anim, book preview, book name/author)
-    BookDrawAssets book_draw_assets(QImage(":/dark"), QImage(":/light0"), QImage(":/light1"), QImage(":/light2"));
+    BookDrawAssets book_draw_assets(QImage(":/dark"), QImage(":/light0"), QImage(":/light1"), QImage(":/light2"), QImage(":/light3"));
     QDir covers_path = QFileDialog::getExistingDirectory(parent, "Select the directory containing the raw cover files (as XXXX.png):");
     counter = 0;
     Font font = gen_book_font();

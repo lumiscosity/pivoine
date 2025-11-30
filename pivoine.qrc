@@ -4,5 +4,6 @@
         <file alias="light1">assets/light1.png</file>
         <file alias="light0">assets/light0.png</file>
         <file alias="dark">assets/dark.png</file>
+        <file alias="light3">assets/light3.png</file>
     </qresource>
 </RCC>
