@@ -1,10 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="dark0">assets/dark0.png</file>
-        <file alias="dark2">assets/dark2.png</file>
-        <file alias="dark1">assets/dark1.png</file>
         <file alias="light2">assets/light2.png</file>
         <file alias="light1">assets/light1.png</file>
         <file alias="light0">assets/light0.png</file>
+        <file alias="dark">assets/dark.png</file>
     </qresource>
 </RCC>
