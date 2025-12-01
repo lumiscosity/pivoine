@@ -40,32 +40,6 @@ std::vector<lcf::rpg::EventCommand> gen_check(QList<Condition> &list, int32_t de
     return v;
 }
 
-QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
-    QList<Condition> c;
-    if (map) {
-        c.append(Condition::from_map(map));
-        return c;
-    }
-    if (s) {
-        c.append(Condition::from_s(s));
-        return c;
-    }
-    if (rp) {
-        c.append(Condition::from_rp(rp));
-        return c;
-    }
-    if (!raw.isEmpty()){
-        for (QString i : raw.split("]")) {
-            if (!i.isEmpty()){
-                QStringList temp = i.last(i.length() - 1).split(",");
-                Condition next_cond(temp[0].last(temp[0].length() - 1).first(temp[0].length() - 2), {temp[1].toInt(), temp[2].toInt(), temp[3].toInt(), temp[4].toInt(), temp[5].toInt(), temp[6].toInt()});
-                c.push_back(next_cond);
-            }
-        }
-    }
-    return c;
-}
-
 QPixmap gen_book_name(const Font &font, int id, QString name) {
     QPixmap p(320, 24);
     p.fill(Qt::transparent);

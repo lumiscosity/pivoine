@@ -100,35 +100,8 @@ inline QImage gen_cover_preview(QImage cover) {
 
 int run_cover(std::string project, QWidget *parent, bool overwrite){
     // load the cover data as a tsv
-    QList<cover> cover_list;
-    QFile f(QFileDialog::getOpenFileName(parent, "Select the cover data", "", "Tab separated values (*.tsv)"));
-    if (f.open(QFile::ReadOnly | QFile::Text)){
-        QTextStream in(&f);
-        QString s;
-        QStringList validate = in.readLine().split("\t");
-        if (
-            validate[0] != "ID" ||
-            validate[1] != "Name" ||
-            validate[2] != "Author" ||
-            validate[3] != "Map" ||
-            validate[4] != "Switch" ||
-            validate[5] != "RP Unlock" ||
-            validate[6] != "Custom" ||
-            validate[7] != "Info"
-        ) {
-            QMessageBox::critical(parent, "Error", "Invalid header detected! This might not be a book cover data .tsv file.");
-        }
-
-        while (in.readLineInto(&s)) {
-            QString s_copy = s;
-            if (!s_copy.right(s_copy.length()-4).replace("\t", "").isEmpty()){
-                QStringList split = s.split("\t");
-                if (split.size() >= 7) {
-                    cover_list.append(cover(split[1].trimmed(), split[2].trimmed(), gen_condition_list(split[3].toInt(), split[4].toInt(), split[5].toInt(), split[6])));
-                }
-            }
-        }
-    } else {
+    QList<cover> cover_list = load_cover_list(parent);
+    if (cover_list.isEmpty()){
         return 1;
     }
 

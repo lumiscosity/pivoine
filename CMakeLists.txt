@@ -47,6 +47,7 @@ qt_add_executable(pivoine
   src/validate_dialog.cpp
   src/validate_dialog.ui
   src/track.cpp
+  src/book_data.cpp
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)

@@ -75,35 +75,8 @@ QPixmap generate_getbox(QString filename) {
 
 int run_theme(std::string project, QWidget *parent, bool overwrite) {
     // load the theme data as a tsv
-    QList<theme> theme_list;
-    QFile theme_f(QFileDialog::getOpenFileName(parent, "Select the theme data", "", "Tab separated values (*.tsv)"));
-    if (theme_f.open(QFile::ReadOnly | QFile::Text)){
-        QTextStream in(&theme_f);
-        QString s;
-        QStringList validate = in.readLine().split("\t");
-        if (
-            validate[0] != "ID" ||
-            validate[1] != "Name" ||
-            validate[2] != "Author" ||
-            validate[3] != "Filename" ||
-            validate[4] != "BG Mode" ||
-            validate[5] != "Switch" ||
-            validate[6] != "Custom" ||
-            validate[7] != "Info"
-            ) {
-            QMessageBox::critical(parent, "Error", "Invalid header detected! This might not be a menu theme data .tsv file.");
-        }
-
-        while (in.readLineInto(&s)) {
-            QString s_copy = s;
-            if (!s_copy.right(s_copy.length()-4).replace("\t", "").isEmpty()){
-                QStringList split = s.split("\t");
-                if (split.size() >= 7) {
-                    theme_list.append(theme(split[1].trimmed(), split[2].trimmed(), split[3].trimmed(), split[4].trimmed(), gen_condition_list(0, split[5].toInt(), 0, split[6])));
-                }
-            }
-        }
-    } else {
+    QList<theme> theme_list = load_theme_list(parent);
+    if (theme_list.isEmpty()){
         return 1;
     }
 

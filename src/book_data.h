@@ -4,6 +4,7 @@
 #include "../third_party/dbstring.h"
 #include <QList>
 #include <QString>
+#include <QWidget>
 #include <lcf/dbarray.h>
 
 class Condition {
@@ -34,6 +35,7 @@ private:
     lcf::DBArray<int32_t> params;
 };
 
+QList<Condition> gen_condition_list(int map, int s, int rp, QString raw);
 
 struct cover {
     cover(QString name, QString author, QList<Condition> cond)
@@ -43,6 +45,8 @@ struct cover {
     QString author;
     QList<Condition> cond;
 };
+
+QList<cover> load_cover_list(QWidget *parent);
 
 struct theme {
     theme(QString name, QString author, QString file, QString tiling,
@@ -57,4 +61,4 @@ struct theme {
     QList<Condition> cond;
 };
 
-
+QList<theme> load_theme_list(QWidget *parent);
