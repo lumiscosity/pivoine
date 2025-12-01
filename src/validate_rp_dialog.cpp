@@ -55,9 +55,10 @@ void ValidateRPDialog::validate()
                   QFile::exists(check_path + j.track_file + ".mp3") ||
                   QFile::exists(check_path + j.track_file + ".ogg") ||
                   QFile::exists(check_path + j.track_file + ".opus") ||
-                  QFile::exists(check_path + j.track_file + ".mid")
+                  QFile::exists(check_path + j.track_file + ".mid") ||
                   // i'm not adding a full rtp filename list for this exception
-                  || j.track_file == "SERain")) {
+                  j.track_file == "SERain" ||
+                  j.track_file == "SESea" )) {
                 push("- Track " + QString::number(co) + " variation " + QString::number(ci) +
                      " refers to the music file " + j.track_file +
                      ", which is missing!");
