@@ -74,6 +74,12 @@ void ValidateRPDialog::validate()
                      " variation " + QString::number(ci) +
                      " is missing!");
             }
+            // check for missing skill ids on multi-map setups
+            if (j.map_id.size() > 1 && j.skill == 0) {
+                push("- Track " + QString::number(co) +
+                     " variation " + QString::number(ci) +
+                     " covers multiple maps, but has no skill switch!");
+            }
 
             // store used skill ids for later
             if (j.skill != 0) {
