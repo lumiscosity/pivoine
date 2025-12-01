@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ValidateRPDialog</class>
- <widget class="QDialog" name="ValidateRPDialog">
+ <class>ValidateDialog</class>
+ <widget class="QDialog" name="ValidateDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -41,7 +41,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>ValidateRPDialog</receiver>
+   <receiver>ValidateDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -57,7 +57,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>ValidateRPDialog</receiver>
+   <receiver>ValidateDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

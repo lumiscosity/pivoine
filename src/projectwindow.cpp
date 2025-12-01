@@ -5,7 +5,7 @@
 #include "ui_projectwindow.h"
 #include "cover.h"
 #include "theme.h"
-#include "validate_rp_dialog.h"
+#include "validate_dialog.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -89,8 +89,8 @@ void ProjectWindow::on_reservationListPushButton_clicked()
 
 void ProjectWindow::on_validateRPPushButton_clicked()
 {
-    ValidateRPDialog dialog(this->project, this);
-    dialog.validate();
+    ValidateDialog dialog(this->project, this);
+    dialog.validate_record_player();
     dialog.exec();
 }
 

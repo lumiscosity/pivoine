@@ -1,8 +1,8 @@
 #include "../third_party/dbstring.h"
-#include "validate_rp_dialog.h"
+#include "validate_dialog.h"
 #include "lcf/lmu/reader.h"
 #include "track.h"
-#include "ui_validate_rp_dialog.h"
+#include "ui_validate_dialog.h"
 
 #include <QMessageBox>
 
@@ -24,23 +24,23 @@ void insert_or_create(QHash<int, QSet<int>> &dest, int key, int value) {
     }
 }
 
-ValidateRPDialog::ValidateRPDialog(QString project, QWidget *parent)
+ValidateDialog::ValidateDialog(QString project, QWidget *parent)
     : QDialog(parent)
-    , project(project), ui(new Ui::ValidateRPDialog)
+    , project(project), ui(new Ui::ValidateDialog)
 {
     ui->setupUi(this);
 }
 
-ValidateRPDialog::~ValidateRPDialog()
+ValidateDialog::~ValidateDialog()
 {
     delete ui;
 }
 
-void ValidateRPDialog::push(QString string) {
+void ValidateDialog::push(QString string) {
     ui->plainTextEdit->appendPlainText(string);
 }
 
-void ValidateRPDialog::validate()
+void ValidateDialog::validate_record_player()
 {
     QList<QList<track>> tracks = load_track_list(this);
     QString check_path = this->project + "/Music/";
