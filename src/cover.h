@@ -105,7 +105,20 @@ int run_cover(std::string project, QWidget *parent, bool overwrite){
     if (f.open(QFile::ReadOnly | QFile::Text)){
         QTextStream in(&f);
         QString s;
-        in.readLine();
+        QStringList validate = in.readLine().split("\t");
+        if (
+            validate[0] != "ID" ||
+            validate[1] != "Name" ||
+            validate[2] != "Author" ||
+            validate[3] != "Map" ||
+            validate[4] != "Switch" ||
+            validate[5] != "RP Unlock" ||
+            validate[6] != "Custom" ||
+            validate[7] != "Info"
+        ) {
+            QMessageBox::critical(parent, "Error", "Invalid header detected! This might not be a book cover data .tsv file.");
+        }
+
         while (in.readLineInto(&s)) {
             QString s_copy = s;
             if (!s_copy.right(s_copy.length()-4).replace("\t", "").isEmpty()){
@@ -182,7 +195,7 @@ int run_cover(std::string project, QWidget *parent, bool overwrite){
                         .save(anim_fname);
                 }
                 QString cover_fname(QString::fromStdString(project) + "/Picture/book/cover/cpreview" + QString::number(counter).rightJustified(4, QChar(48)) + ".png");
-                if (!QFile::exists(cover_fname) || overwrite){
+                if (!QFile::exists(cover_fname) || overwrite) {
                     gen_cover_preview(cover_image)
                         .save(cover_fname);
                 }

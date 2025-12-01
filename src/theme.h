@@ -9,6 +9,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QRgb>
+#include <QMessageBox>
 
 #include <lcf/rpg/event.h>
 
@@ -79,7 +80,20 @@ int run_theme(std::string project, QWidget *parent, bool overwrite) {
     if (theme_f.open(QFile::ReadOnly | QFile::Text)){
         QTextStream in(&theme_f);
         QString s;
-        in.readLine();
+        QStringList validate = in.readLine().split("\t");
+        if (
+            validate[0] != "ID" ||
+            validate[1] != "Name" ||
+            validate[2] != "Author" ||
+            validate[3] != "Filename" ||
+            validate[4] != "BG Mode" ||
+            validate[5] != "Switch" ||
+            validate[6] != "Custom" ||
+            validate[7] != "Info"
+            ) {
+            QMessageBox::critical(parent, "Error", "Invalid header detected! This might not be a menu theme data .tsv file.");
+        }
+
         while (in.readLineInto(&s)) {
             QString s_copy = s;
             if (!s_copy.right(s_copy.length()-4).replace("\t", "").isEmpty()){
