@@ -39,6 +39,7 @@ void ProjectWindow::on_projectPushButton_clicked()
     ui->coverPushButton->setEnabled(!dirty);
     ui->themePushButton->setEnabled(!dirty);
     ui->reservationListPushButton->setEnabled(!dirty);
+    ui->validateRPPushButton->setEnabled(!dirty);
 }
 
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>242</height>
+    <height>251</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,6 +114,9 @@
    </item>
    <item>
     <widget class="QPushButton" name="validateRPPushButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="toolTip">
       <string>This might take a while!</string>
      </property>
