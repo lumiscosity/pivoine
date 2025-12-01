@@ -74,6 +74,16 @@ void ValidateDialog::validate_record_player()
                      " variation " + QString::number(ci) +
                      " is missing!");
             }
+            // check if the description file exists
+            if (!(QFile::exists(this->project
+                                + "/Picture/record_player/description_"
+                                + QString::number(co).rightJustified(4, QChar(48))
+                                + QString::number(ci).rightJustified(2, QChar(48))
+                                + ".png"))) {
+                push("- The description for track " + QString::number(co) +
+                     " variation " + QString::number(ci) +
+                     " is missing!");
+            }
             // check for missing skill ids on multi-map setups
             if (j.map_id.size() > 1 && j.skill == 0) {
                 push("- Track " + QString::number(co) +
