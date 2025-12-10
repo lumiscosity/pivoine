@@ -1,7 +1,7 @@
 #pragma once
 
 #include "book.h"
-#include "book_data.h"
+#include "../data/book_data.h"
 #include "lcf/lmu/reader.h"
 
 #include <QFile>

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../third_party/dbstring.h"
-#include "font.h"
+#include "../../third_party/dbstring.h"
+#include "../font.h"
 #include "lcf/lmu/reader.h"
-#include "text.h"
-#include "track.h"
+#include "../text.h"
+#include "../data/track.h"
 
 #include <lcf/rpg/event.h>
 #include <lcf/rpg/map.h>

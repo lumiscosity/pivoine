@@ -1,7 +1,7 @@
-#include "../third_party/dbstring.h"
+#include "../../third_party/dbstring.h"
 #include "validate_dialog.h"
 #include "lcf/lmu/reader.h"
-#include "track.h"
+#include "../data/track.h"
 #include "ui_validate_dialog.h"
 
 #include <QMessageBox>

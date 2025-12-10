@@ -1,7 +1,7 @@
 #pragma once
 
-#include "book_data.h"
-#include "text.h"
+#include "../data/book_data.h"
+#include "../text.h"
 #include <lcf/rpg/event.h>
 #include <lcf/rpg/eventcommand.h>
 #include <lcf/rpg/eventpage.h>

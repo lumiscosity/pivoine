@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../third_party/dbstring.h"
+#include "../../third_party/dbstring.h"
 #include "lcf/lmu/reader.h"
-#include "snack.h"
+#include "../data/snack.h"
 #include <string>
 #include <QDialog>
 #include <QFileDialog>

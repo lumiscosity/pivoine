@@ -29,8 +29,8 @@ qt_add_executable(pivoine
   third_party/dbstring.h
   src/font.h
   src/main.cpp
-  src/text.h
   src/reservation_list.h
+  src/text.h
   src/data/book_data.cpp
   src/data/book_data.h
   src/data/snack.cpp

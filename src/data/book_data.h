@@ -1,7 +1,7 @@
 #pragma once
 
 #include "lcf/rpg/eventcommand.h"
-#include "../third_party/dbstring.h"
+#include "../../third_party/dbstring.h"
 #include <QList>
 #include <QString>
 #include <QWidget>

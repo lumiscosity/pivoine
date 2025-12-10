@@ -20,7 +20,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <lcf/lmu/reader.h>
-#include "projectwindow.h"
+#include "ui/project_window.h"
 
 int main(int argc, char *argv[])
 {
