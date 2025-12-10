@@ -1,12 +1,13 @@
 # Pivoine
-A data generation utility for Collective Unconscious. It can generate data for the following subsystems:
+A data generation and validation utility for Collective Unconscious. It can generate data for the following subsystems:
 
-- Record Player (slot data, max. track count, descriptions)
+- Record player (slot data, max. track count, descriptions)
 - Covers (full animation, preview, name and author)
-- Menu Themes (preview, name and author)
+- Menu themes (preview, name and author)
+- Giant VM (max. snack count, unlock checks, pictures)
 
 ## Building
-Requires `Qt6` and uses CMake for building. `liblcf` will be built as part of the process, unless specified otherwise.
+Requires `Qt6` (minimum version 6.8) and uses CMake for building. `liblcf` will be built as part of the process, unless specified otherwise.
 
 ```
 git clone https://github.com/lumiscosity/pivoine
