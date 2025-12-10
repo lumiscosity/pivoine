@@ -27,29 +27,29 @@ endif(USE_SYSTEM_LIBLCF)
 qt_add_executable(pivoine
   MANUAL_FINALIZATION
   third_party/dbstring.h
-  src/main.cpp
-  src/projectwindow.cpp
-  src/projectwindow.h
-  src/projectwindow.ui
-  src/track.h
-  src/record_player.h
-  src/book.h
-  src/book_data.h
-  src/cover.h
-  src/theme.h
-  src/text.h
   src/font.h
+  src/main.cpp
+  src/text.h
   src/reservation_list.h
-  src/giant_vm.h
+  src/data/book_data.cpp
+  src/data/book_data.h
+  src/data/snack.cpp
+  src/data/snack.h
+  src/data/track.cpp
+  src/data/track.h
+  src/generator/book.h
+  src/generator/cover.h
+  src/generator/giant_vm.h
+  src/generator/record_player.h
+  src/generator/theme.h
+  src/ui/project_window.cpp
+  src/ui/project_window.h
+  src/ui/project_window.ui
+  src/ui/validate_dialog.cpp
+  src/ui/validate_dialog.h
+  src/ui/validate_dialog.ui
   LICENSE
   pivoine.qrc
-  src/validate_dialog.h
-  src/validate_dialog.cpp
-  src/validate_dialog.ui
-  src/track.cpp
-  src/book_data.cpp
-  src/snack.h
-  src/snack.cpp
 )
 target_link_libraries(pivoine PRIVATE Qt6::Widgets)
 target_link_libraries(pivoine PRIVATE lcf)
