@@ -1,5 +1,6 @@
 #include "projectwindow.h"
 #include "book.h"
+#include "giant_vm.h"
 #include "record_player.h"
 #include "reservation_list.h"
 #include "ui_projectwindow.h"
@@ -38,6 +39,7 @@ void ProjectWindow::on_projectPushButton_clicked()
     ui->rpPushButton->setEnabled(!dirty);
     ui->coverPushButton->setEnabled(!dirty);
     ui->themePushButton->setEnabled(!dirty);
+    ui->vmPushButton->setEnabled(!dirty);
     ui->reservationListPushButton->setEnabled(!dirty);
     ui->validateRPPushButton->setEnabled(!dirty);
 }
@@ -76,6 +78,16 @@ void ProjectWindow::on_themePushButton_clicked()
     }
 }
 
+void ProjectWindow::on_vmPushButton_clicked()
+{
+    int run = run_giant_vm(this->project.toStdString(), this);
+    if (!run) {
+        QMessageBox::information(this, "Finished", "Giant VM updated!");
+    } else if (run != 1) {
+        QMessageBox::warning(this, "Error", "Something went wrong! Error code: " + QString::number(run));
+    }
+}
+
 void ProjectWindow::on_reservationListPushButton_clicked()
 {
     int run = run_reservation_list(this->project.toStdString(), this);
@@ -93,5 +105,3 @@ void ProjectWindow::on_validateRPPushButton_clicked()
     dialog.validate_record_player();
     dialog.exec();
 }
-
-
