@@ -7,6 +7,9 @@
 
 void validate_record_player(ValidateDialog *dialog) {
     QList<QList<track>> tracks = load_track_list(dialog);
+    if (tracks.isEmpty()) {
+        return;
+    }
     QString check_path = dialog->project + "/Music/";
     QHash<int, QList<int>> tsv_skill_ids;
 
