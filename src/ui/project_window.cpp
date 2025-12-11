@@ -4,6 +4,7 @@
 #include "../generator/record_player.h"
 #include "../generator/cover.h"
 #include "../generator/theme.h"
+#include "../validator/record_player.h"
 #include "../reservation_list.h"
 #include "ui_project_window.h"
 #include "validate_dialog.h"
@@ -102,6 +103,6 @@ void ProjectWindow::on_reservationListPushButton_clicked()
 void ProjectWindow::on_validateRPPushButton_clicked()
 {
     ValidateDialog dialog(this->project, this);
-    dialog.validate_record_player();
+    validate_record_player(&dialog);
     dialog.exec();
 }

@@ -14,10 +14,10 @@ public:
     explicit ValidateDialog(QString project, QWidget *parent = nullptr);
     ~ValidateDialog();
 
-    void validate_record_player();
+    void push(QString string);
+
+    QString project;
 
 private:
-    QString project;
     Ui::ValidateDialog *ui;
-    void push(QString string);
 };

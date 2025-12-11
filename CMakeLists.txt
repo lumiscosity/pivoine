@@ -48,6 +48,8 @@ qt_add_executable(pivoine
   src/ui/validate_dialog.cpp
   src/ui/validate_dialog.h
   src/ui/validate_dialog.ui
+  src/validator/common.h
+  src/validator/record_player.h
   LICENSE
   pivoine.qrc
 )
