@@ -3,6 +3,41 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+SkillCondition Condition::get_skill() {
+    if (this->params.size() >= 3 && this->params[0] == 5 && this->params[2] == 4) {
+        return SkillCondition {
+            this->params[1],
+            this->params[3]
+        };
+    } else {
+        return SkillCondition{};
+    }
+}
+
+SwitchCondition Condition::get_switch() {
+    if (this->params.size() >= 3 && this->params[0] == 0 && this->params[3] == 0) {
+        return SwitchCondition {
+            this->params[1],
+            this->params[2] == 0
+        };
+    } else {
+        return SwitchCondition{};
+    }
+}
+
+VariableCondition Condition::get_variable() {
+    if (this->params.size() >= 3 && this->params[0] == 0 && this->params[3] == 0) {
+        return VariableCondition {
+            this->params[1],
+            this->params[2] == 1,
+            static_cast<VariableOperator>(this->params[4]),
+            this->params[3]
+        };
+    } else {
+        return VariableCondition{};
+    }
+}
+
 QList<Condition> gen_condition_list(int map, int s, int rp, QString raw) {
     QList<Condition> c;
     if (map) {

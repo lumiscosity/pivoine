@@ -7,6 +7,32 @@
 #include <QWidget>
 #include <lcf/dbarray.h>
 
+struct SwitchCondition {
+    int id;
+    bool state = true;
+};
+
+enum VariableOperator {
+    EQ = 0,
+    GE = 1,
+    LE = 2,
+    L = 3,
+    G = 4,
+    NE = 5
+};
+
+struct VariableCondition {
+    int src;
+    bool dest_is_ptr;
+    VariableOperator op;
+    int dest;
+};
+
+struct SkillCondition {
+    int actor;
+    int skill;
+};
+
 class Condition {
 public:
     inline Condition(const QString &str, lcf::DBArray<int32_t> params) : str(str), params(params) {};
@@ -30,6 +56,11 @@ public:
     static Condition from_rp(int32_t id) {
         return Condition("", { 5, 3, 4, id, 0, 1 });
     }
+
+    SkillCondition get_skill();
+    SwitchCondition get_switch();
+    VariableCondition get_variable();
+
 private:
     QString str;
     lcf::DBArray<int32_t> params;
